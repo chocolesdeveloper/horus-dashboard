@@ -46,33 +46,33 @@ async function main() {
         },
       });
 
-      // for (let i = 0; i < 10; i++) {
-      //   await prisma.contract.create({
-      //     data: {
-      //       name: contracts[0].name + [i],
-      //       contracting: contracts[0].contracting + [i],
-      //       document: contracts[0].document,
-      //       address: contracts[0].address,
-      //       contractValue: contracts[0].contractValue,
-      //       refundAmount: contracts[0].refundAmount,
-      //       companyHires: contracts[0].companyHires + [i],
-      //       contractDate: contracts[0].contractDate,
-      //       contractTerm: contracts[0].contractTerm,
-      //       executedDate: contracts[0].executedDate,
-      //       executedValue: contracts[0].executedValue,
-      //       modality: {
-      //         connect: {
-      //           id: modalityCreate.id,
-      //         },
-      //       },
-      //       status: {
-      //         connect: {
-      //           id: statusCreate.id,
-      //         },
-      //       },
-      //     },
-      //   });
-      // }
+      for (let i = 0; i < 10; i++) {
+        await prisma.contract.create({
+          data: {
+            name: contracts[0].name + [i],
+            contracting: contracts[0].contracting + [i],
+            document: contracts[0].document,
+            address: contracts[0].address,
+            contractValue: contracts[0].contractValue,
+            refundAmount: contracts[0].refundAmount,
+            companyHires: contracts[0].companyHires + [i],
+            contractDate: contracts[0].contractDate,
+            contractTerm: contracts[0].contractTerm,
+            executedDate: contracts[0].executedDate,
+            executedValue: contracts[0].executedValue,
+            modality: {
+              connect: {
+                id: modalityCreate.id,
+              },
+            },
+            status: {
+              connect: {
+                id: statusCreate.id,
+              },
+            },
+          },
+        });
+      }
     }
   } catch (error) {
     console.error("Erro ao popular o banco de dados:", error);
