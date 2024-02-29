@@ -11,19 +11,19 @@ import { format } from "date-fns";
 
 import { Search } from "lucide-react";
 import { OrderStatus } from "./order-stauts";
-import { Contract, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { formatCpfCnpj } from "../util/format-cpf-cnpj";
 import { formatMoney } from "../../../lib/formart-money";
 
 interface ContractInfoProps {
-  contract: Contract;
-  statusName: string;
+  contract: Prisma.ContractGetPayload<{
+    include: {
+      status: true;
+    };
+  }>;
 }
 
-export async function ContractInfo({
-  contract,
-  statusName,
-}: ContractInfoProps) {
+export async function ContractInfo({ contract }: ContractInfoProps) {
   const profit = Number(contract.contractValue) - Number(contract.refundAmount);
   const profitability = Math.round(
     (profit / Number(contract.contractValue)) * 100,
@@ -54,7 +54,7 @@ export async function ContractInfo({
             <TableRow>
               <TableCell>Status</TableCell>
               <TableCell className="flex justify-end">
-                <OrderStatus status={statusName} />
+                <OrderStatus status={contract.status.name} />
               </TableCell>
             </TableRow>
             <TableRow>

@@ -20,7 +20,7 @@ export function TableRowContact({ contract }: TableRowContactProps) {
   return (
     <TableRow key={contract.id}>
       <TableCell>
-        <ContractInfo contract={contract} statusName={contract.status.name} />
+        <ContractInfo contract={contract} />
       </TableCell>
       <TableCell>{contract.document}</TableCell>
       <TableCell>{contract.name}</TableCell>
