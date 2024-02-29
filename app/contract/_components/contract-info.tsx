@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { format, isAfter } from "date-fns";
+import { format } from "date-fns";
 
 import { Search } from "lucide-react";
 import { OrderStatus } from "./order-stauts";
@@ -32,33 +32,6 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
   );
   const remaining =
     Number(contract.contractValue) - Number(contract.executedValue);
-
-  const isPassed = isAfter(new Date(), contract.contractTerm);
-
-  if (remaining <= 0) {
-    const finishedStatus = await db.status.findFirst({
-      where: {
-        name: "concluded",
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!finishedStatus) {
-      return null;
-    }
-
-    await db.contract.update({
-      where: {
-        id: contract.id,
-      },
-      data: {
-        statusId: finishedStatus.id,
-      },
-    });
-    revalidatePath("/contract");
-  }
 
   return (
     <Dialog>
