@@ -68,6 +68,7 @@ export async function createContract({
       contractTerm: contract.contractTerm,
       modalityId: contract.modalityId,
       statusId: status[0].id,
+      userId: contract.userId,
     },
   });
 

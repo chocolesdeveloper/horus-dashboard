@@ -40,6 +40,7 @@ import colors from "tailwindcss/colors";
 import { validateCpf } from "../../contract/util/validate-cpf";
 import { validateCnpj } from "../../contract/util/validate-cnpj";
 import { getNameModality } from "../../contract/util/get-name-modality";
+import { useSession } from "next-auth/react";
 
 const createContractSchema = z.object({
   modalityId: z.string(),
@@ -64,6 +65,8 @@ export function CreateContract({ modalitys }: CreateContractProps) {
     new Date(),
   );
   const [contractTerm, setContractTerm] = useState<Date | undefined>(undefined);
+
+  const { data: user } = useSession();
 
   const {
     handleSubmit,
@@ -134,6 +137,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
           contractDate: contractDate,
           contractTerm: contractTerm!,
           modalityId: data.modalityId,
+          userId: user?.user.id!,
         },
       });
 

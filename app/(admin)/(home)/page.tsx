@@ -3,6 +3,8 @@ import { Card } from "./_componets/card";
 import { CreateContract } from "./_componets/create-contract";
 import { RevenueChart } from "./_componets/revenue-chart";
 import { db } from "@/app/lib/prisma";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface HomeProps {
   searchParams: {
@@ -12,9 +14,12 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
+  const session = await getServerSession(nextAuthOptions);
+
   const modalitys = await db.modality.findMany();
   const contracts = await db.contract.findMany({
     where: {
+      userId: session!.user.id,
       status: {
         name: searchParams.status,
       },

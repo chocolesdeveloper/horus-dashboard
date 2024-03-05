@@ -23,8 +23,11 @@ interface ContractPageProps {
 export default async function ContractPage({
   searchParams,
 }: ContractPageProps) {
+  const session = await getServerSession(nextAuthOptions);
+
   const contracts = await db.contract.findMany({
     where: {
+      userId: session!.user.id,
       document: {
         contains: searchParams.document,
       },
