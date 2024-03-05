@@ -33,13 +33,13 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import CurrencyInput from "react-currency-input-field";
 import { Modality } from "@prisma/client";
-import { getNameModality } from "@/app/contract/util/get-name-modality";
 import { createContract } from "../_action/create-contract";
 import { toast } from "sonner";
 
 import colors from "tailwindcss/colors";
-import { validateCpf } from "@/app/contract/util/validate-cpf";
-import { validateCnpj } from "@/app/contract/util/validate-cnpj";
+import { validateCpf } from "../../contract/util/validate-cpf";
+import { validateCnpj } from "../../contract/util/validate-cnpj";
+import { getNameModality } from "../../contract/util/get-name-modality";
 
 const createContractSchema = z.object({
   modalityId: z.string(),

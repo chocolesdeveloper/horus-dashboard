@@ -1,8 +1,8 @@
 import { formatMoney } from "@/lib/formart-money";
-import { db } from "../lib/prisma";
 import { Card } from "./_componets/card";
 import { CreateContract } from "./_componets/create-contract";
 import { RevenueChart } from "./_componets/revenue-chart";
+import { db } from "@/app/lib/prisma";
 
 interface HomeProps {
   searchParams: {

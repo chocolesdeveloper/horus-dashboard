@@ -39,3 +39,12 @@ model Contract {
   status   Status   @relation(fields: [statusId], references: [id])
   modality Modality @relation(fields: [modalityId], references: [id])
 }
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+}

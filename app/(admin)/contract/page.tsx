@@ -5,10 +5,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "../lib/prisma";
 
 import { SearchFilter } from "./_components/search";
 import { TableRowContact } from "./_components/table-row-contract";
+import { db } from "@/app/lib/prisma";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface ContractPageProps {
   searchParams: {

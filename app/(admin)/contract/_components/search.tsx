@@ -45,7 +45,6 @@ export function SearchFilter() {
     });
 
   function handleFilter(data: SearchFilterSchema) {
-    const document = data.document?.replace(/[^\d]/g, "");
     const modality = !["private", "auction", "bidding"].includes(
       data.modality ?? "",
     )
@@ -58,7 +57,7 @@ export function SearchFilter() {
       : data.status;
 
     router.push(
-      `/contract?${document ? `document=${document || ""}` : ""}${data.name ? `&name=${data.name || ""}` : ""}${modality ? `&modality=${modality === "all" ? "" : modality}` : ""}${status ? `&status=${status}` : ""}`,
+      `/contract?${data.document ? `document=${data.document || ""}` : ""}${data.name ? `&name=${data.name || ""}` : ""}${modality ? `&modality=${modality === "all" ? "" : modality}` : ""}${status ? `&status=${status}` : ""}`,
     );
   }
 
