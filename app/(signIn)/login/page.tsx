@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export const loginSchema = z.object({
+const loginSchema = z.object({
   email: z.string().email("Insira um email valído."),
   password: z.string().min(1, "Password não pode está vazio."),
 });
