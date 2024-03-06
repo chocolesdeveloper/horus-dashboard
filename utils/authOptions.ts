@@ -5,14 +5,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "username-login",
+      id: "login",
       name: "credentials",
       credentials: {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
 
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const response = await fetch(`${process.env.NEXT_AUTH_URL}/api/login`, {
           method: "POST",
           headers: {
@@ -34,6 +34,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+
   secret: process.env.NEXT_AUTH_SECRET as string,
   pages: {
     signIn: "/login",

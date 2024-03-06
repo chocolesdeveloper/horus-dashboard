@@ -39,10 +39,9 @@ export default function LoginPage() {
   });
 
   async function handleClickLogin(data: LoginType) {
-    const result = await signIn("username-login", {
+    const result = await signIn("login", {
       email: data.email,
       password: data.password,
-      redirect: false,
     });
 
     if (result?.error) {
