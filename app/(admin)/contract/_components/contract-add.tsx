@@ -21,7 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { CalendarIcon, PlusCircleIcon } from "lucide-react";
 import { ptBR } from "date-fns/locale";
 import { UpdatePartialField } from "../_action/update-partial-field";

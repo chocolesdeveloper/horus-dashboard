@@ -1,4 +1,4 @@
-import { formatMoney } from "@/lib/formart-money";
+import { formatMoney } from "@/utils/formart-money";
 import { Card } from "./_componets/card";
 import { CreateContract } from "./_componets/create-contract";
 import { RevenueChart } from "./_componets/revenue-chart";

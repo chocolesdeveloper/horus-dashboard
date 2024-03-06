@@ -30,7 +30,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import CurrencyInput from "react-currency-input-field";
 import { Modality } from "@prisma/client";
 import { createContract } from "../_action/create-contract";

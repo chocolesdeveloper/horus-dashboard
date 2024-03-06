@@ -4,7 +4,7 @@ import { OrderStatus } from "./order-stauts";
 import { ContractAdd } from "./contract-add";
 import { ConfirmedDelete } from "./alert-dialog-content";
 import { Prisma } from "@prisma/client";
-import { formatMoney } from "@/lib/formart-money";
+import { formatMoney } from "@/utils/formart-money";
 import { getNameModality } from "../util/get-name-modality";
 
 interface TableRowContactProps {

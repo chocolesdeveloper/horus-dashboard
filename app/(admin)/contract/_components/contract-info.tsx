@@ -13,7 +13,7 @@ import { Search } from "lucide-react";
 import { OrderStatus } from "./order-stauts";
 import { Prisma } from "@prisma/client";
 import { formatCpfCnpj } from "../util/format-cpf-cnpj";
-import { formatMoney } from "@/lib/formart-money";
+import { formatMoney } from "@/utils/formart-money";
 
 interface ContractInfoProps {
   contract: Prisma.ContractGetPayload<{
