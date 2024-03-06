@@ -5,6 +5,7 @@ import { RevenueChart } from "./_componets/revenue-chart";
 import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
+import { redirect } from "next/navigation";
 
 interface HomeProps {
   searchParams: {
@@ -17,7 +18,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return null;
+    redirect("/login");
   }
 
   const modalitys = await db.modality.findMany();
