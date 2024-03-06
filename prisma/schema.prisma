@@ -47,6 +47,7 @@ model User {
   name      String
   email     String     @unique
   password  String
+  role      Int        @default(1)
   imageUrl  String?
   createdAt DateTime   @default(now())
   Contract  Contract[]

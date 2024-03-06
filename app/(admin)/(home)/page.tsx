@@ -16,10 +16,14 @@ interface HomeProps {
 export default async function Home({ searchParams }: HomeProps) {
   const session = await getServerSession(nextAuthOptions);
 
+  if (!session) {
+    return null;
+  }
+
   const modalitys = await db.modality.findMany();
   const contracts = await db.contract.findMany({
     where: {
-      userId: session!.user.id,
+      userId: session.user.id,
       status: {
         name: searchParams.status,
       },

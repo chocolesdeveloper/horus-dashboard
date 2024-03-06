@@ -25,9 +25,13 @@ export default async function ContractPage({
 }: ContractPageProps) {
   const session = await getServerSession(nextAuthOptions);
 
+  if(!session) {
+    return null
+  }
+
   const contracts = await db.contract.findMany({
     where: {
-      userId: session!.user.id,
+      userId: session.user.id,
       document: {
         contains: searchParams.document,
       },
@@ -80,7 +84,6 @@ export default async function ContractPage({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* TODO: Refatorar codigo */}
             {contracts.map((contract) => (
               <TableRowContact contract={contract} key={contract.id} />
             ))}

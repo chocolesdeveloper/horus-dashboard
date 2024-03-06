@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
 import { format, isAfter } from "date-fns";
 import { Prisma } from "@prisma/client";
 import { Calendar } from "@/components/ui/calendar";
@@ -58,7 +57,6 @@ export function ContractAdd({ contract }: ContractAddProps) {
 
   const {
     handleSubmit,
-    register,
     control,
     reset,
     formState: { errors },
@@ -87,14 +85,6 @@ export function ContractAdd({ contract }: ContractAddProps) {
       console.log(error);
     }
   }
-
-  // TODO: arrumar multiplas rederenziação
-
-  // useEffect(() => {
-  //   if (remaining <= 0) {
-  //     updateConcluded(contract.id);
-  //   }
-  // }, [remaining, contract.id]);
 
   return (
     <Dialog>

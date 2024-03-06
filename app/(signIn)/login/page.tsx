@@ -47,6 +47,8 @@ export default function Login() {
 
     if (result?.error) {
       console.log("Error: " + result.error);
+      toast.error("Parece que algo deu errado, verifique seu e-mail e senha.");
+      return;
     }
 
     router.replace("/");
