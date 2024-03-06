@@ -4,7 +4,7 @@ import { CreateContract } from "./_componets/create-contract";
 import { RevenueChart } from "./_componets/revenue-chart";
 import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 interface HomeProps {
   searchParams: {
@@ -14,7 +14,7 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const session = await getServerSession(nextAuthOptions);
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     return null;

@@ -5,9 +5,9 @@ import { cn } from "@/utils/utils";
 import { Toaster } from "sonner";
 import { Header } from "../components/header";
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { NextAuthSessionProvider } from "@/providers/session-provider";
+import { authOptions } from "@/utils/authOptions";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default async function PrivateLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(nextAuthOptions);
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     return redirect("/login");

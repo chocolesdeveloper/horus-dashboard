@@ -10,7 +10,7 @@ import { SearchFilter } from "./_components/search";
 import { TableRowContact } from "./_components/table-row-contract";
 import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 interface ContractPageProps {
   searchParams: {
@@ -23,10 +23,10 @@ interface ContractPageProps {
 export default async function ContractPage({
   searchParams,
 }: ContractPageProps) {
-  const session = await getServerSession(nextAuthOptions);
+  const session = await getServerSession(authOptions);
 
-  if(!session) {
-    return null
+  if (!session) {
+    return null;
   }
 
   const contracts = await db.contract.findMany({
