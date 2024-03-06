@@ -13,6 +13,8 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
+        console.log("Inicio");
+
         const response = await fetch(`${process.env.NEXT_AUTH_URL}/api/login`, {
           method: "POST",
           headers: {
@@ -27,8 +29,10 @@ export const authOptions: NextAuthOptions = {
         const user = await response.json();
 
         if (user && response.ok) {
+          console.log("Ok");
           return user;
         }
+        console.log("off");
 
         return null;
       },
