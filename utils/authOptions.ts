@@ -13,26 +13,25 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        console.log("Inicio");
-
-        const response = await fetch(`${process.env.NEXT_AUTH_URL}/api/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `https://dashborad-financeiro-engenharia.vercel.app/api/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
           },
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-        });
+        );
 
         const user = await response.json();
 
         if (user && response.ok) {
-          console.log("Ok");
           return user;
         }
-        console.log("off");
 
         return null;
       },
