@@ -25,7 +25,7 @@ export const loginSchema = z.object({
 
 type LoginType = z.infer<typeof loginSchema>;
 
-export default function Login() {
+export default function LoginPage() {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const router = useRouter();
