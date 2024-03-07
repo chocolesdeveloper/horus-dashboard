@@ -69,7 +69,7 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
           {dataRechart.length > 0 ? (
             <ResponsiveContainer width="100%" height={340}>
               <LineChart
-                data={dataRechart.slice(0, 6) ?? []}
+                data={dataRechart.splice(-6) ?? []}
                 style={{ fontSize: 12 }}
               >
                 <YAxis
