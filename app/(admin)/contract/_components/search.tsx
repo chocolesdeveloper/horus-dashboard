@@ -57,7 +57,7 @@ export function SearchFilter() {
       : data.status;
 
     router.push(
-      `/contract?${data.document ? `document=${data.document || ""}` : ""}${data.name ? `&name=${data.name || ""}` : ""}${modality ? `&modality=${modality === "all" ? "" : modality}` : ""}${status ? `&status=${status}` : ""}`,
+      `/contract?${data.document ? `document=${data.document.replace(/\D/g, "") || ""}` : ""}${data.name ? `&name=${data.name || ""}` : ""}${modality ? `&modality=${modality === "all" ? "" : modality}` : ""}${status ? `&status=${status}` : ""}`,
     );
   }
 

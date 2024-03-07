@@ -6,6 +6,7 @@ import { ConfirmedDelete } from "./alert-dialog-content";
 import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/utils/formart-money";
 import { getNameModality } from "../util/get-name-modality";
+import { replaceDocument } from "../../(home)/_utils/replace-document";
 
 interface TableRowContactProps {
   contract: Prisma.ContractGetPayload<{
@@ -17,12 +18,20 @@ interface TableRowContactProps {
 }
 
 export function TableRowContact({ contract }: TableRowContactProps) {
+  let documentReplace = "";
+
+  if (contract.document.length === 11) {
+    documentReplace = replaceDocument(contract.document, true);
+  } else {
+    documentReplace = replaceDocument(contract.document, false);
+  }
+
   return (
     <TableRow key={contract.id}>
       <TableCell>
         <ContractInfo contract={contract} />
       </TableCell>
-      <TableCell>{contract.document}</TableCell>
+      <TableCell>{documentReplace}</TableCell>
       <TableCell>{contract.name}</TableCell>
       <TableCell>{formatMoney(Number(contract.contractValue))}</TableCell>
       <TableCell>{getNameModality(contract.modality.name)}</TableCell>

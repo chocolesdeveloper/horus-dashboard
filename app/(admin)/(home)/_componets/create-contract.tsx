@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, PlusCircleIcon } from "lucide-react";
+import { CalendarIcon, Loader2Icon, PlusCircleIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { replaceDocument } from "../_utils/replace-document";
@@ -43,15 +43,15 @@ import { getNameModality } from "../../contract/util/get-name-modality";
 import { useSession } from "next-auth/react";
 
 const createContractSchema = z.object({
-  modalityId: z.string(),
-  name: z.string(),
-  contracting: z.string(),
-  document: z.string(),
+  modalityId: z.string().min(1),
+  name: z.string().min(1),
+  contracting: z.string().min(1),
+  document: z.string().min(1),
   checkbox: z.boolean(),
-  address: z.string(),
-  contractValue: z.coerce.number(),
-  refundAmount: z.coerce.number(),
-  companyHires: z.string(),
+  address: z.string().min(1),
+  contractValue: z.coerce.number().min(1),
+  refundAmount: z.coerce.number().min(1),
+  companyHires: z.string().min(1),
 });
 
 type CreateContractType = z.infer<typeof createContractSchema>;
@@ -74,13 +74,13 @@ export function CreateContract({ modalitys }: CreateContractProps) {
     reset,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CreateContractType>({
     resolver: zodResolver(createContractSchema),
     defaultValues: {
       address: "",
       checkbox: false,
-      companyHires: "",
+      companyHires: "Horus",
       contracting: "",
       contractValue: undefined,
       document: "",
@@ -129,7 +129,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
         contract: {
           name: data.name,
           contracting: data.contracting,
-          document: data.document,
+          document: data.document.replace(/\D/g, ""),
           address: data.address,
           contractValue: data.contractValue,
           refundAmount: data.refundAmount,
@@ -147,12 +147,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
       toast.success("Contrato criado com sucesso.");
     } catch (error) {
       console.error(error);
-      toast.error("Ops, algo deu errado, tente novamente mais tarde!", {
-        style: {
-          background: colors.red["500"],
-          color: "#fff",
-        },
-      });
+      toast.error("Ops, algo deu errado, tente novamente mais tarde!");
     }
   }
 
@@ -203,17 +198,26 @@ export function CreateContract({ modalitys }: CreateContractProps) {
           </label>
           <label htmlFor="" className="flex items-center gap-2">
             <span className="w-32 text-accent-foreground">Nome:</span>
-            <Input placeholder="Nome do contrato" {...register("name")} />
+            <Input
+              placeholder="Nome do contrato"
+              {...register("name")}
+              className={`${errors?.name && "focus-visible:ring-red-500"}`}
+            />
           </label>
           <label htmlFor="" className="flex items-center gap-2">
             <span className="w-32 text-accent-foreground">Contratante:</span>
-            <Input placeholder="John Joe" {...register("contracting")} />
+            <Input
+              placeholder="John Joe"
+              {...register("contracting")}
+              className={`${errors?.contracting && "focus-visible:ring-red-500"}`}
+            />
           </label>
           <label htmlFor="" className="flex items-center gap-2">
             <span className="w-32 text-accent-foreground">Endereço:</span>
             <Input
               placeholder="R. Qualquer uma, 566"
               {...register("address")}
+              className={`${errors?.address && "focus-visible:ring-red-500"}`}
             />
           </label>
           <label htmlFor="" className="flex items-center gap-2">
@@ -223,6 +227,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
               className={cn(
                 "flex-1",
                 !documentSelected && "focus-visible:ring-red-500",
+                errors?.document && "focus-visible:ring-red-500",
               )}
               value={valueDocument}
               {...register("document")}
@@ -249,7 +254,10 @@ export function CreateContract({ modalitys }: CreateContractProps) {
                   onValueChange={field.onChange}
                   value={field.value}
                   name={field.name}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className={cn(
+                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                    errors?.contractValue && "focus-visible:ring-red-500",
+                  )}
                   placeholder="R$ 0.000.000"
                   prefix="R$"
                   decimalsLimit={2}
@@ -273,7 +281,10 @@ export function CreateContract({ modalitys }: CreateContractProps) {
                   onValueChange={field.onChange}
                   value={field.value}
                   name={field.name}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className={cn(
+                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                    errors?.contractValue && "focus-visible:ring-red-500",
+                  )}
                   placeholder="R$ 0.000.000"
                   prefix="R$"
                   decimalsLimit={2}
@@ -289,7 +300,11 @@ export function CreateContract({ modalitys }: CreateContractProps) {
             <span className="w-32 text-accent-foreground">
               Empresa contrata:
             </span>
-            <Input placeholder="Horus" {...register("companyHires")} />
+            <Input
+              placeholder="Horus"
+              {...register("companyHires")}
+              className={`${errors.companyHires && "focus-visible:ring-red-500"}`}
+            />
           </label>
           <label htmlFor="" className="flex items-center gap-2">
             <span className="w-24 text-accent-foreground">Data inicial:</span>
@@ -359,7 +374,16 @@ export function CreateContract({ modalitys }: CreateContractProps) {
             </Popover>
           </label>
 
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <div className="flex items-center gap-2">
+                Cadastrando
+                <Loader2Icon size={18} className="animate-spin" />
+              </div>
+            ) : (
+              "Cadastrar"
+            )}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
