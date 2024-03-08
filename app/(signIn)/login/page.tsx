@@ -45,11 +45,15 @@ export default function LoginPage() {
       redirect: false,
     });
 
+    console.log(result)
+
     if (result?.error) {
       console.log("Error: " + result.error);
       toast.error("Parece que algo deu errado, verifique seu e-mail e senha.");
       return;
     }
+
+    console.log('aqui')
 
     router.replace("/");
   }
