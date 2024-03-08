@@ -39,13 +39,13 @@ export default function LoginPage() {
   });
 
   async function handleClickLogin(data: LoginType) {
-    const result = await signIn("login", {
+    const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     });
 
-    console.log(result)
+    console.log(result);
 
     if (result?.error) {
       console.log("Error: " + result.error);
@@ -53,7 +53,7 @@ export default function LoginPage() {
       return;
     }
 
-    console.log('aqui')
+    console.log("aqui");
 
     router.replace("/");
   }
