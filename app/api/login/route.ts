@@ -14,12 +14,12 @@ export async function POST(req: Request) {
 
   const { email, password } = response;
 
+  email.toLocaleLowerCase();
+
   const user = await db.user.findUnique({
     where: {
       email,
-      AND: {
-        password,
-      },
+      password,
     },
   });
 
