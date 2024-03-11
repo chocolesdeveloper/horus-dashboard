@@ -73,7 +73,7 @@ export function ContractAdd({ contract }: ContractAddProps) {
       const contractResponse = await UpdatePartialField({
         contractId: contract.id,
         executedDate: date,
-        executedValue: withCentavos(data.executedValue),
+        executedValue: data.executedValue,
       });
 
       if (contractResponse.executedValue === contractResponse.contractValue) {
