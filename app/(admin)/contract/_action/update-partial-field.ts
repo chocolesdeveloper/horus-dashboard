@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 interface UpdatePartialFieldProps {
   contractId: string;
   executedDate: Date | undefined;
-  executedValue: string;
+  executedValue: number;
 }
 
 export async function UpdatePartialField({
@@ -16,6 +16,8 @@ export async function UpdatePartialField({
   executedDate,
   executedValue,
 }: UpdatePartialFieldProps): Promise<Contract> {
+  console.log(executedValue);
+
   const contract = await db.contract.findFirst({
     where: {
       id: contractId,
