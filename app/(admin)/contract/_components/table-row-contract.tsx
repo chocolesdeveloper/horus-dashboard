@@ -33,7 +33,7 @@ export function TableRowContact({ contract }: TableRowContactProps) {
       </TableCell>
       <TableCell>{documentReplace}</TableCell>
       <TableCell>{contract.name}</TableCell>
-      <TableCell>{formatMoney(contract.contractValue / 100)}</TableCell>
+      <TableCell>{formatMoney(Number(contract.contractValue))}</TableCell>
       <TableCell>{getNameModality(contract.modality.name)}</TableCell>
       <TableCell>
         <OrderStatus status={contract.status.name} />

@@ -12,8 +12,7 @@ import {
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { getContracts } from "../_action/get-contracts";
-import { Contract } from "@prisma/client";
+import { Contract, Prisma } from "@prisma/client";
 import { SelectType } from "./select-type";
 import { useRouter } from "next/navigation";
 import { SelectStatus } from "./select-status";
@@ -35,7 +34,7 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
     contracts.map((contract) => {
       return {
         name: contract.name,
-        receipt: contract.contractValue / 100,
+        receipt: new Prisma.Decimal(String(contract.contractValue)),
       };
     });
 
@@ -68,10 +67,7 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
         <CardContent>
           {dataRechart.length > 0 ? (
             <ResponsiveContainer width="100%" height={340}>
-              <LineChart
-                data={dataRechart.splice(-6) ?? []}
-                style={{ fontSize: 12 }}
-              >
+              <LineChart data={dataRechart ?? []} style={{ fontSize: 12 }}>
                 <YAxis
                   stroke="#888"
                   axisLine={false}

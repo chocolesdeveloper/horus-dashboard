@@ -24,13 +24,13 @@ interface ContractInfoProps {
 }
 
 export async function ContractInfo({ contract }: ContractInfoProps) {
-  const profit = (contract.contractValue - contract.refundAmount) / 100;
+  const profit = Number(contract.contractValue) - Number(contract.refundAmount);
   const profitability = Math.round(
-    (profit / (contract.contractValue / 100)) * 100,
+    (profit / Number(contract.contractValue)) * 100,
   );
 
   const remaining =
-    (contract.contractValue - (contract.executedValue ?? 0)) / 100;
+    Number(contract.contractValue) - Number(contract.executedValue);
 
   return (
     <Dialog>
@@ -40,7 +40,7 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="overflow-y-auto">
         <DialogHeader>
           <DialogHeader className="text-2xl tracking-tight">
             Contrato de {contract.contracting}
@@ -85,13 +85,13 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
             <TableRow>
               <TableCell>Valor do contrato</TableCell>
               <TableCell className="flex justify-end">
-                {formatMoney(contract.contractValue / 100)}
+                {formatMoney(Number(contract.contractValue))}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Valor do desembolso</TableCell>
               <TableCell className="flex justify-end">
-                {formatMoney(contract.refundAmount / 100)}
+                {formatMoney(Number(contract.refundAmount))}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -126,7 +126,7 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
               <TableCell>Valor executado</TableCell>
               <TableCell className="flex justify-end">
                 {contract.executedValue
-                  ? formatMoney(contract.executedValue / 100)
+                  ? formatMoney(Number(contract.executedValue))
                   : "R$ 0"}
               </TableCell>
             </TableRow>

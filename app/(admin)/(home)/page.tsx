@@ -34,15 +34,13 @@ export default async function Home({ searchParams }: HomeProps) {
     },
   });
 
-  const contractValueTotal =
-    contracts.reduce((acc, value) => {
-      return acc + Number(value.contractValue);
-    }, 0) / 100;
+  const contractValueTotal = contracts.reduce((acc, value) => {
+    return acc + Number(value.contractValue);
+  }, 0);
 
-  const contractRefundAmount =
-    contracts.reduce((acc, value) => {
-      return acc + Number(value.refundAmount);
-    }, 0) / 100;
+  const contractRefundAmount = contracts.reduce((acc, value) => {
+    return acc + Number(value.refundAmount);
+  }, 0);
 
   const contractProfit = contractValueTotal - contractRefundAmount;
 

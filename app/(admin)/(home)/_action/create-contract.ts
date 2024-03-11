@@ -1,11 +1,11 @@
 "use server";
 
-import { validateCnpj } from "../../_utils/validate-cnpj";
-import { validateCpf } from "../../_utils/validate-cpf";
 import { db } from "@/app/lib/prisma";
-import { Contract, Status } from "@prisma/client";
+import { Contract } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { validateCpf } from "../../_utils/validate-cpf";
+import { validateCnpj } from "../../_utils/validate-cnpj";
 
 interface CreateContractProps {
   contract: Omit<
@@ -43,15 +43,16 @@ export async function createContract({
   } else {
     let isValidateCnpj = validateCnpj(contract.document);
 
-    if (isValidateCnpj) {
-      return new NextResponse(
-        JSON.stringify({
-          error: "CNPJ inválido",
-        }),
-        {
-          status: 401,
-        },
-      );
+    if (!isValidateCnpj) {
+      throw new Error("CNPJ inválido");
+      //   return new NextResponse(
+      //     JSON.stringify({
+      //       error: "CNPJ inválido",
+      //     }),
+      //     {
+      //       status: 401,
+      //     },
+      //   );
     }
   }
 

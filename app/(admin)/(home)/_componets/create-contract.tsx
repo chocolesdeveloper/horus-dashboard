@@ -32,7 +32,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
 import { cn } from "@/app/_utils/utils";
 import CurrencyInput from "react-currency-input-field";
-import { Modality } from "@prisma/client";
+import { Modality, Prisma } from "@prisma/client";
 import { createContract } from "../_action/create-contract";
 import { toast } from "sonner";
 
@@ -103,7 +103,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
     isValidateCnpj = validateCnpj(document);
   }
 
-  const documentSelected = isValidateCpf || isValidateCnpj;
+  const documentSelected = isCpf ? isValidateCpf : isValidateCnpj;
 
   async function handleFormSubmit(data: CreateContractType) {
     try {
@@ -118,24 +118,21 @@ export function CreateContract({ modalitys }: CreateContractProps) {
       const contractValue = withCentavos(data.contractValue);
       const refundAmount = withCentavos(data.refundAmount);
 
-      console.log(refundAmount);
-
-      console.log(contractValue);
-
       await createContract({
         contract: {
           name: data.name,
           contracting: data.contracting,
           document: data.document.replace(/\D/g, ""),
           address: data.address,
-          contractValue: contractValue,
-          refundAmount: refundAmount,
+          contractValue: new Prisma.Decimal(contractValue),
+          refundAmount: new Prisma.Decimal(refundAmount),
           companyHires: data.companyHires,
           contractDate: contractDate,
           contractTerm: contractTerm!,
           modalityId: data.modalityId,
           userId: user?.user.id!,
         },
+        isCpf,
       });
 
       reset();
@@ -143,7 +140,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
 
       toast.success("Contrato criado com sucesso.");
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("Ops, algo deu errado, tente novamente mais tarde!");
     }
   }

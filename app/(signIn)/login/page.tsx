@@ -40,7 +40,7 @@ export default function LoginPage() {
 
   async function handleClickLogin(data: LoginType) {
     const result = await signIn("credentials", {
-      email: data.email.toLowerCase(),
+      email: data.email.toLowerCase().trim(),
       password: data.password,
       redirect: false,
     });
