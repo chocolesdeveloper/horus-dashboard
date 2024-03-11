@@ -35,7 +35,7 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
     contracts.map((contract) => {
       return {
         name: contract.name,
-        receipt: contract.contractValue,
+        receipt: contract.contractValue / 100,
       };
     });
 

@@ -1,10 +1,10 @@
-import { formatMoney } from "@/utils/formart-money";
+import { formatMoney } from "@/app/(admin)/_utils/formart-money";
 import { Card } from "./_componets/card";
 import { CreateContract } from "./_componets/create-contract";
 import { RevenueChart } from "./_componets/revenue-chart";
 import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions";
+import { authOptions } from "@/app/_utils/authOptions";
 import { redirect } from "next/navigation";
 
 interface HomeProps {
@@ -34,13 +34,15 @@ export default async function Home({ searchParams }: HomeProps) {
     },
   });
 
-  const contractValueTotal = contracts.reduce((acc, value) => {
-    return acc + Number(value.contractValue);
-  }, 0);
+  const contractValueTotal =
+    contracts.reduce((acc, value) => {
+      return acc + Number(value.contractValue);
+    }, 0) / 100;
 
-  const contractRefundAmount = contracts.reduce((acc, value) => {
-    return acc + Number(value.refundAmount);
-  }, 0);
+  const contractRefundAmount =
+    contracts.reduce((acc, value) => {
+      return acc + Number(value.refundAmount);
+    }, 0) / 100;
 
   const contractProfit = contractValueTotal - contractRefundAmount;
 

@@ -12,8 +12,8 @@ import { format } from "date-fns";
 import { Search } from "lucide-react";
 import { OrderStatus } from "./order-stauts";
 import { Prisma } from "@prisma/client";
-import { formatCpfCnpj } from "../util/format-cpf-cnpj";
-import { formatMoney } from "@/utils/formart-money";
+import { formatCpfCnpj } from "../_utils/format-cpf-cnpj";
+import { formatMoney } from "@/app/(admin)/_utils/formart-money";
 
 interface ContractInfoProps {
   contract: Prisma.ContractGetPayload<{
@@ -24,12 +24,13 @@ interface ContractInfoProps {
 }
 
 export async function ContractInfo({ contract }: ContractInfoProps) {
-  const profit = Number(contract.contractValue) - Number(contract.refundAmount);
+  const profit = (contract.contractValue - contract.refundAmount) / 100;
   const profitability = Math.round(
-    (profit / Number(contract.contractValue)) * 100,
+    (profit / (contract.contractValue / 100)) * 100,
   );
+
   const remaining =
-    Number(contract.contractValue) - Number(contract.executedValue);
+    (contract.contractValue - (contract.executedValue ?? 0)) / 100;
 
   return (
     <Dialog>
@@ -84,13 +85,13 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
             <TableRow>
               <TableCell>Valor do contrato</TableCell>
               <TableCell className="flex justify-end">
-                {formatMoney(Number(contract.contractValue))}
+                {formatMoney(contract.contractValue / 100)}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Valor do desembolso</TableCell>
               <TableCell className="flex justify-end">
-                {formatMoney(Number(contract.refundAmount))}
+                {formatMoney(contract.refundAmount / 100)}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -125,7 +126,7 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
               <TableCell>Valor executado</TableCell>
               <TableCell className="flex justify-end">
                 {contract.executedValue
-                  ? formatMoney(Number(contract.executedValue))
+                  ? formatMoney(contract.executedValue / 100)
                   : "R$ 0"}
               </TableCell>
             </TableRow>

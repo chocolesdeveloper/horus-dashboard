@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, Loader2Icon, PlusCircleIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { replaceDocument } from "../_utils/replace-document";
+import { replaceDocument } from "../../_utils/replace-document";
 import {
   Popover,
   PopoverContent,
@@ -30,17 +30,17 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
-import { cn } from "@/utils/utils";
+import { cn } from "@/app/_utils/utils";
 import CurrencyInput from "react-currency-input-field";
 import { Modality } from "@prisma/client";
 import { createContract } from "../_action/create-contract";
 import { toast } from "sonner";
 
-import colors from "tailwindcss/colors";
-import { validateCpf } from "../../contract/util/validate-cpf";
-import { validateCnpj } from "../../contract/util/validate-cnpj";
-import { getNameModality } from "../../contract/util/get-name-modality";
+import { validateCpf } from "../../_utils/validate-cpf";
+import { validateCnpj } from "../../_utils/validate-cnpj";
+import { getNameModality } from "../../contract/_utils/get-name-modality";
 import { useSession } from "next-auth/react";
+import { withCentavos } from "../../_utils/with-centavos";
 
 const createContractSchema = z.object({
   modalityId: z.string().min(1),
@@ -49,8 +49,8 @@ const createContractSchema = z.object({
   document: z.string().min(1),
   checkbox: z.boolean(),
   address: z.string().min(1),
-  contractValue: z.coerce.number().min(1),
-  refundAmount: z.coerce.number().min(1),
+  contractValue: z.string().min(1),
+  refundAmount: z.string().min(1),
   companyHires: z.string().min(1),
 });
 
@@ -105,25 +105,22 @@ export function CreateContract({ modalitys }: CreateContractProps) {
 
   const documentSelected = isValidateCpf || isValidateCnpj;
 
-  async function handleFormSubmit(data: any) {
+  async function handleFormSubmit(data: CreateContractType) {
     try {
       if (!contractDate) {
-        return toast.error("Informe a data inicial do contrato.", {
-          style: {
-            background: colors.red["500"],
-            color: "#fff",
-          },
-        });
+        return toast.error("Informe a data inicial do contrato.");
       }
 
       if (!contractTerm) {
-        return toast.error("Informe a data final do contrato.", {
-          style: {
-            background: colors.red["500"],
-            color: "#fff",
-          },
-        });
+        return toast.error("Informe a data final do contrato.");
       }
+
+      const contractValue = withCentavos(data.contractValue);
+      const refundAmount = withCentavos(data.refundAmount);
+
+      console.log(refundAmount);
+
+      console.log(contractValue);
 
       await createContract({
         contract: {
@@ -131,8 +128,8 @@ export function CreateContract({ modalitys }: CreateContractProps) {
           contracting: data.contracting,
           document: data.document.replace(/\D/g, ""),
           address: data.address,
-          contractValue: data.contractValue,
-          refundAmount: data.refundAmount,
+          contractValue: contractValue,
+          refundAmount: refundAmount,
           companyHires: data.companyHires,
           contractDate: contractDate,
           contractTerm: contractTerm!,
@@ -260,11 +257,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
                   )}
                   placeholder="R$ 0.000.000"
                   prefix="R$"
-                  decimalsLimit={2}
-                  intlConfig={{
-                    locale: "pt-BR",
-                    currency: "BRL",
-                  }}
+                  allowDecimals
                 />
               )}
             />
@@ -287,11 +280,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
                   )}
                   placeholder="R$ 0.000.000"
                   prefix="R$"
-                  decimalsLimit={2}
-                  intlConfig={{
-                    locale: "pt-BR",
-                    currency: "BRL",
-                  }}
+                  allowDecimals
                 />
               )}
             />

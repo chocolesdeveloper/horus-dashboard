@@ -21,13 +21,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/utils/utils";
+import { cn } from "@/app/_utils/utils";
 import { CalendarIcon, PlusCircleIcon } from "lucide-react";
 import { ptBR } from "date-fns/locale";
 import { UpdatePartialField } from "../_action/update-partial-field";
 import { toast } from "sonner";
 import { updateConcluded } from "../_action/update-concluded";
 import CurrencyInput from "react-currency-input-field";
+import { withCentavos } from "../../_utils/with-centavos";
 
 const ContractAddSchema = z.object({
   executedDate: z.date().optional(),
@@ -72,7 +73,7 @@ export function ContractAdd({ contract }: ContractAddProps) {
       const contractResponse = await UpdatePartialField({
         contractId: contract.id,
         executedDate: date,
-        executedValue: data.executedValue!.replace(/[^\d]/g, ""),
+        executedValue: withCentavos(data.executedValue),
       });
 
       if (contractResponse.executedValue === contractResponse.contractValue) {

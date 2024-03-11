@@ -10,7 +10,7 @@ import { SearchFilter } from "./_components/search";
 import { TableRowContact } from "./_components/table-row-contract";
 import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions";
+import { authOptions } from "@/app/_utils/authOptions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

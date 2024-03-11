@@ -4,9 +4,9 @@ import { OrderStatus } from "./order-stauts";
 import { ContractAdd } from "./contract-add";
 import { ConfirmedDelete } from "./alert-dialog-content";
 import { Prisma } from "@prisma/client";
-import { formatMoney } from "@/utils/formart-money";
-import { getNameModality } from "../util/get-name-modality";
-import { replaceDocument } from "../../(home)/_utils/replace-document";
+import { formatMoney } from "@/app/(admin)/_utils/formart-money";
+import { getNameModality } from "../_utils/get-name-modality";
+import { replaceDocument } from "../../_utils/replace-document";
 
 interface TableRowContactProps {
   contract: Prisma.ContractGetPayload<{
@@ -33,7 +33,7 @@ export function TableRowContact({ contract }: TableRowContactProps) {
       </TableCell>
       <TableCell>{documentReplace}</TableCell>
       <TableCell>{contract.name}</TableCell>
-      <TableCell>{formatMoney(Number(contract.contractValue))}</TableCell>
+      <TableCell>{formatMoney(contract.contractValue / 100)}</TableCell>
       <TableCell>{getNameModality(contract.modality.name)}</TableCell>
       <TableCell>
         <OrderStatus status={contract.status.name} />

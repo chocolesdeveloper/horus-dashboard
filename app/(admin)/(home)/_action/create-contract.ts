@@ -1,7 +1,7 @@
 "use server";
 
-import { validateCnpj } from "../../contract/util/validate-cnpj";
-import { validateCpf } from "../../contract/util/validate-cpf";
+import { validateCnpj } from "../../_utils/validate-cnpj";
+import { validateCpf } from "../../_utils/validate-cpf";
 import { db } from "@/app/lib/prisma";
 import { Contract, Status } from "@prisma/client";
 import { revalidatePath } from "next/cache";
