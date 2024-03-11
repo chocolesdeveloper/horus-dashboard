@@ -40,7 +40,7 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="overflow-y-auto">
+      <DialogContent className="max-h-[80%] overflow-y-auto">
         <DialogHeader>
           <DialogHeader className="text-2xl tracking-tight">
             Contrato de {contract.contracting}
