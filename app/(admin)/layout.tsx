@@ -31,7 +31,7 @@ export default async function PrivateLayout({
 
   return (
     <html lang="en">
-      <body className={cn("dark", inter.className)}>
+      <body className={cn(inter.className)}>
         <NextAuthSessionProvider>
           <Header />
           {children}

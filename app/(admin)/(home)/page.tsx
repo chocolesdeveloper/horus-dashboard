@@ -49,9 +49,7 @@ export default async function Home({ searchParams }: HomeProps) {
       <div className="flex items-center justify-between border-b">
         <h1 className="p-5 text-3xl font-bold tracking-tight">Home</h1>
 
-        <div className="flex items-center gap-4">
-          <CreateContract modalitys={modalitys} />
-        </div>
+        <CreateContract modalitys={modalitys} />
       </div>
 
       <div className="mt-4 grid grid-cols-4 gap-4">

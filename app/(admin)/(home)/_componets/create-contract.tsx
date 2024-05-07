@@ -148,7 +148,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-3">
+        <Button variant="horus" className="flex items-center gap-3">
           <PlusCircleIcon size={20} />
           Criar contrato
         </Button>

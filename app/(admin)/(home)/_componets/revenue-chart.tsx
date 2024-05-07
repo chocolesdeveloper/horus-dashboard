@@ -34,7 +34,7 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
     contracts.map((contract) => {
       return {
         name: contract.name,
-        receipt: new Prisma.Decimal(String(contract.contractValue)),
+        receipt: Number(contract.contractValue),
       };
     });
 
@@ -81,13 +81,13 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
                   }
                 />
 
-                <XAxis
+                {/* <XAxis
                   dataKey="name"
                   axisLine={false}
                   tickLine={false}
                   dy={16}
                   dx={16}
-                />
+                /> */}
                 <CartesianGrid vertical={false} className="stroke-muted" />
 
                 <Line

@@ -12,6 +12,7 @@ import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_utils/authOptions";
 import { Metadata } from "next";
+import { CreateContract } from "../(home)/_componets/create-contract";
 
 export const metadata: Metadata = {
   title: "Contratos",
@@ -33,6 +34,8 @@ export default async function ContractPage({
   if (!session) {
     return null;
   }
+
+  const modalitys = await db.modality.findMany();
 
   const contracts = await db.contract.findMany({
     where: {
@@ -68,7 +71,11 @@ export default async function ContractPage({
 
   return (
     <div className="container flex flex-col gap-3">
-      <h1 className="px-5 pt-5 text-3xl font-bold tracking-tight">Contratos</h1>
+      <div className="flex items-center justify-between border-b">
+        <h1 className="p-5 text-3xl font-bold tracking-tight">Contratos</h1>
+
+        <CreateContract modalitys={modalitys} />
+      </div>
 
       <div className="px-5">
         <SearchFilter />

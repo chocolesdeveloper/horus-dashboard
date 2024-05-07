@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,31 +8,28 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { format } from "date-fns";
 
-import { Search } from "lucide-react";
-import { OrderStatus } from "./order-stauts";
+import { ArrowLeftFromLineIcon, Search, SquarePenIcon, X } from "lucide-react";
 import { Prisma } from "@prisma/client";
-import { formatCpfCnpj } from "../_utils/format-cpf-cnpj";
-import { formatMoney } from "@/app/(admin)/_utils/formart-money";
+import { useState } from "react";
+import { InfoComponent } from "./info";
+import { UpdateContract } from "./update-contract";
 
 interface ContractInfoProps {
   contract: Prisma.ContractGetPayload<{
     include: {
       status: true;
+      modality: true;
     };
   }>;
 }
 
-export async function ContractInfo({ contract }: ContractInfoProps) {
-  const profit = Number(contract.contractValue) - Number(contract.refundAmount);
-  const profitability = Math.round(
-    (profit / Number(contract.contractValue)) * 100,
-  );
+export function ContractInfo({ contract }: ContractInfoProps) {
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  const remaining =
-    Number(contract.contractValue) - Number(contract.executedValue);
+  function onUpdateContract() {
+    setIsUpdate(false);
+  }
 
   return (
     <Dialog>
@@ -41,103 +40,35 @@ export async function ContractInfo({ contract }: ContractInfoProps) {
       </DialogTrigger>
 
       <DialogContent className="max-h-[80%] overflow-y-auto">
-        <DialogHeader>
-          <DialogHeader className="text-2xl tracking-tight">
-            Contrato de {contract.contracting}
+        <DialogHeader className="mt-4">
+          <DialogHeader>
+            <button
+              className="flex flex-row items-center gap-4"
+              onClick={() => setIsUpdate(!isUpdate)}
+            >
+              <h2 className="text-2xl tracking-tight">
+                Contrato de {contract.contracting}
+              </h2>
+              {isUpdate ? (
+                <ArrowLeftFromLineIcon className="size-5 cursor-pointer transition-all hover:text-horus" />
+              ) : (
+                <SquarePenIcon className="size-5 cursor-pointer transition-all hover:text-horus" />
+              )}
+            </button>
           </DialogHeader>
           <DialogDescription className="text-sm text-gray-400">
             ID do contrato: {contract.id}
           </DialogDescription>
         </DialogHeader>
 
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableCell>Status</TableCell>
-              <TableCell className="flex justify-end">
-                <OrderStatus status={contract.status.name} />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Contrato</TableCell>
-              <TableCell className="flex justify-end">
-                {contract.name}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Empresa contrata</TableCell>
-              <TableCell className="flex justify-end">
-                {contract.companyHires}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell className="flex justify-end">
-                {contract.contracting}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>CPF/CNPJ</TableCell>
-              <TableCell className="flex justify-end">
-                {formatCpfCnpj(contract.document)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Valor do contrato</TableCell>
-              <TableCell className="flex justify-end">
-                {formatMoney(Number(contract.contractValue))}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Valor do desembolso</TableCell>
-              <TableCell className="flex justify-end">
-                {formatMoney(Number(contract.refundAmount))}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Valor do lucro</TableCell>
-              <TableCell className="flex justify-end">
-                {formatMoney(profit)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Valor da rentabilidade</TableCell>
-              <TableCell className="flex justify-end">
-                {profitability}%
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                Data inicial: {format(contract.contractDate, "dd/MM/yyyy")}
-              </TableCell>
-              <TableCell className="flex justify-end">
-                Data final: {format(contract.contractTerm, "dd/MM/yyyy")}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Data executada</TableCell>
-              <TableCell className="flex justify-end">
-                {contract.executedDate
-                  ? format(contract.executedDate, "dd/MM/yyyy")
-                  : "Não executado"}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Valor executado</TableCell>
-              <TableCell className="flex justify-end">
-                {contract.executedValue
-                  ? formatMoney(Number(contract.executedValue))
-                  : "R$ 0"}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Total restante</TableCell>
-              <TableCell className="flex justify-end">
-                {formatMoney(remaining < 0 ? 0 : remaining)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        {isUpdate ? (
+          <UpdateContract
+            contract={contract}
+            onSucessUpdate={onUpdateContract}
+          />
+        ) : (
+          <InfoComponent contract={contract} />
+        )}
       </DialogContent>
     </Dialog>
   );

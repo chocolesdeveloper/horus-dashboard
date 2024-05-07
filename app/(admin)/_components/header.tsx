@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { BookTextIcon, DoorOpenIcon, HomeIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -41,10 +42,22 @@ export function Header() {
   const welcomePeriod = getDayPeriod();
 
   return (
-    <header className="h-20 bg-background">
+    <header className="h-20 bg-background pb-10">
       <div className="container flex items-center justify-between px-8">
         <div>
-          {welcomePeriod}, {data?.user.name}. Bem-vindo(a)!
+          <Link href="/">
+            <Image
+              src="/logo-horus.png"
+              alt="Logo Horus"
+              width={80}
+              height={30}
+              className=""
+            />
+          </Link>
+        </div>
+
+        <div>
+          {welcomePeriod} {data?.user.name}. Bem-vindo(a)!
         </div>
         <div className="flex items-center gap-2">
           {NAV_ITEMS.map((item) => {
@@ -57,7 +70,7 @@ export function Header() {
                 key={item.href}
               >
                 <Button
-                  variant={isActive ? "default" : "outline"}
+                  variant={isActive ? "horus" : "outline"}
                   className="flex items-center gap-2"
                 >
                   {item.icon}
