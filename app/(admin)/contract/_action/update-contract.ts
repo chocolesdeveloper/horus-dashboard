@@ -2,11 +2,15 @@
 
 import { authOptions } from "@/app/_utils/authOptions";
 import { db } from "@/app/lib/prisma";
+import { Contract } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 interface updateContractProps {
-  contract: any;
+  contract: Contract & {
+    status: string;
+    modality: string;
+  };
 }
 export async function updateContract({ contract }: updateContractProps) {
   const user = await getServerSession(authOptions);

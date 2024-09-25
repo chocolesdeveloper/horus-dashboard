@@ -12,7 +12,7 @@ import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_utils/authOptions";
 import { Metadata } from "next";
-import { CreateContract } from "../(home)/_componets/create-contract";
+import { CreateContract } from "../(home)/_components/create-contract";
 
 export const metadata: Metadata = {
   title: "Contratos",

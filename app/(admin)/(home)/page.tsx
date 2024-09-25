@@ -1,11 +1,14 @@
-import { formatMoney } from "@/app/(admin)/_utils/formart-money";
-import { Card } from "./_componets/card";
-import { CreateContract } from "./_componets/create-contract";
-import { RevenueChart } from "./_componets/revenue-chart";
 import { db } from "@/app/lib/prisma";
+
 import { getServerSession } from "next-auth";
+
+import { formatMoney } from "@/app/(admin)/_utils/formart-money";
+
+import { Card } from "./_components/card";
 import { authOptions } from "@/app/_utils/authOptions";
-import { redirect } from "next/navigation";
+import { RevenueChart } from "./_components/revenue-chart";
+import { CreateContract } from "./_components/create-contract";
+import { getContracts, getModality } from "../db/queries";
 
 interface HomeProps {
   searchParams: {
@@ -15,24 +18,11 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/login");
-  }
-
-  const modalitys = await db.modality.findMany();
-  const contracts = await db.contract.findMany({
-    where: {
-      userId: session.user.id,
-      status: {
-        name: searchParams.status,
-      },
-      modality: {
-        name: searchParams.modality,
-      },
-    },
-  });
+  const modalitys = await getModality();
+  const contracts = await getContracts(
+    searchParams.status,
+    searchParams.modality,
+  );
 
   const contractValueTotal = contracts.reduce((acc, value) => {
     return acc + Number(value.contractValue);
