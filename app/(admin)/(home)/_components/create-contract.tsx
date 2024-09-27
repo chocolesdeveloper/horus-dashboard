@@ -41,6 +41,7 @@ import { validateCnpj } from "../../_utils/validate-cnpj";
 import { getNameModality } from "../../contract/_utils/get-name-modality";
 import { useSession } from "next-auth/react";
 import { withCentavos } from "../../_utils/with-centavos";
+import { useNewContract } from "../../hooks/use-new-contract";
 
 const createContractSchema = z.object({
   modalityId: z.string().min(1),
@@ -56,11 +57,20 @@ const createContractSchema = z.object({
 
 type CreateContractType = z.infer<typeof createContractSchema>;
 
-interface CreateContractProps {
-  modalitys: Modality[];
-}
+// interface CreateContractProps {
+//   modalitys: Modality[];
+// }
 
-export function CreateContract({ modalitys }: CreateContractProps) {
+const modalitys: any = [
+  {
+    id: "1",
+    name: "Contrato 1",
+  },
+];
+
+export function CreateContract() {
+  const { isOpen, onClose } = useNewContract();
+
   const [contractDate, setContractDate] = useState<Date | undefined>(
     new Date(),
   );
@@ -146,14 +156,7 @@ export function CreateContract({ modalitys }: CreateContractProps) {
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="horus" className="flex items-center gap-3">
-          <PlusCircleIcon size={20} />
-          Criar contrato
-        </Button>
-      </DialogTrigger>
-
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader className="border-b pb-4">
           <DialogTitle>Novo contrato</DialogTitle>

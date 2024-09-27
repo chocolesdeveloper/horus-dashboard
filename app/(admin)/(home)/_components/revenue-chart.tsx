@@ -62,24 +62,26 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
     error(...args);
   };
   return (
-    <div className="flex flex-col items-end gap-4">
-      <Card className="w-full py-6">
+    <div className="flex flex-col items-end gap-4 pb-10">
+      <Card className="w-full py-6 shadow-lg">
         <CardContent>
           {dataRechart.length > 0 ? (
             <ResponsiveContainer width="100%" height={340}>
               <LineChart data={dataRechart ?? []} style={{ fontSize: 12 }}>
-                <YAxis
-                  stroke="#888"
-                  axisLine={false}
-                  tickLine={false}
-                  width={80}
-                  tickFormatter={(value: number) =>
-                    value.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })
-                  }
-                />
+                <div className="hidden lg:block">
+                  <YAxis
+                    stroke="#888"
+                    axisLine={false}
+                    tickLine={false}
+                    width={80}
+                    tickFormatter={(value: number) =>
+                      value.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })
+                    }
+                  />
+                </div>
 
                 {/* <XAxis
                   dataKey="name"
@@ -99,14 +101,14 @@ export function RevenueChart({ contracts }: RevenueChartProps) {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-[340px] items-center justify-center">
+            <div className="flex h-[340px] items-center justify-center text-center">
               Parece que você não tem contratos, tente mudar o filtro.
             </div>
           )}
         </CardContent>
       </Card>
 
-      <div className="flex justify-end gap-2">
+      <div className="flex w-full justify-end gap-2">
         <div className="w-56">
           <SelectStatus onChangeStatus={setSelectStatus} />
         </div>

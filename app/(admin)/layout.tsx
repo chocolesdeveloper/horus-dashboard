@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { NextAuthSessionProvider } from "@/providers/session-provider";
 import { authOptions } from "@/app/_utils/authOptions";
+import { DialogProvider } from "./providers/dialog-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,8 +32,9 @@ export default async function PrivateLayout({
 
   return (
     <html lang="en">
-      <body className={cn(inter.className)}>
+      <body className={cn(inter.className)} suppressHydrationWarning>
         <NextAuthSessionProvider>
+          <DialogProvider />
           <Header />
           {children}
           <Toaster />

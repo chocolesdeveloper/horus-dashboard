@@ -73,21 +73,19 @@ export function SearchFilter() {
   }
 
   return (
-    <div className="flex flex-col gap-4 bg-background">
+    <div className="flex flex-col gap-4">
       <form
-        className="flex items-center gap-4"
+        className="flex flex-wrap items-center justify-center gap-4"
         onSubmit={handleSubmit(handleFilter)}
       >
-        <span>Filtros:</span>
-
         <Input
           placeholder="CPF/CNPJ"
-          className="w-[250px]"
+          className="w-full lg:w-[250px]"
           {...register("document")}
         />
         <Input
           placeholder="Nome do contrato"
-          className="w-[250px]"
+          className="w-full lg:w-[250px]"
           {...register("name")}
         />
         <Controller
@@ -101,7 +99,7 @@ export function SearchFilter() {
               value={value}
               disabled={disabled}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full lg:w-[180px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -131,7 +129,7 @@ export function SearchFilter() {
               value={value}
               disabled={disabled}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full lg:w-[180px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -150,13 +148,18 @@ export function SearchFilter() {
           )}
         />
 
-        <Button type="submit" variant="secondary">
+        <Button type="submit" variant="secondary" className="w-full lg:w-fit">
           <SearchIcon className="mr-2 h-4 w-4" />
-          Filtrar resultados
+          Filtrar
         </Button>
-        <Button type="button" variant="outline" onClick={handleClearFilters}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleClearFilters}
+          className="w-full lg:w-fit"
+        >
           <X className="text- mr-2 h-4 w-4" />
-          Remover filtros
+          Remover
         </Button>
       </form>
     </div>

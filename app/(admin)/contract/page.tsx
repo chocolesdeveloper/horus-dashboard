@@ -8,11 +8,12 @@ import {
 
 import { SearchFilter } from "./_components/search";
 import { TableRowContact } from "./_components/table-row-contract";
-import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_utils/authOptions";
 import { Metadata } from "next";
 import { CreateContract } from "../(home)/_components/create-contract";
+import { getContractFilter, getModality } from "../db/queries";
+import { ButtonCreate } from "../_components/button";
 
 export const metadata: Metadata = {
   title: "Contratos",
@@ -35,72 +36,41 @@ export default async function ContractPage({
     return null;
   }
 
-  const modalitys = await db.modality.findMany();
-
-  const contracts = await db.contract.findMany({
-    where: {
-      userId: session.user.id,
-      document: {
-        contains: searchParams.document,
-      },
-      name: {
-        contains: searchParams.name,
-        mode: "insensitive",
-      },
-      modality: {
-        name: {
-          contains: searchParams.modality,
-          mode: "insensitive",
-        },
-      },
-      status: {
-        name: {
-          contains: searchParams.status,
-          mode: "insensitive",
-        },
-      },
-    },
-    include: {
-      modality: true,
-      status: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const contracts = await getContractFilter(
+    searchParams.document,
+    searchParams.name,
+    searchParams.modality,
+    searchParams.status,
+  );
 
   return (
-    <div className="container flex flex-col gap-3">
-      <div className="flex items-center justify-between border-b">
-        <h1 className="p-5 text-3xl font-bold tracking-tight">Contratos</h1>
+    <div className="container relative -top-32 flex flex-col gap-3">
+      <ButtonCreate />
 
-        <CreateContract modalitys={modalitys} />
-      </div>
-
-      <div className="px-5">
+      <div className="rounded-lg bg-white px-5 pt-5 shadow-xl">
         <SearchFilter />
-      </div>
 
-      <div className="container flex max-h-[700px] w-full overflow-y-auto border border-secondary p-5 [&::-webkit-scrollbar-thumb]:bg-red-500">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]"></TableHead>
-              <TableHead className="w-[150px]">CPF/CNPJ</TableHead>
-              <TableHead className="w-[200px]">Nome do contrato</TableHead>
-              <TableHead className="w-[200px]">Valor do contrato</TableHead>
-              <TableHead className="w-[150px]">Modalidade</TableHead>
-              <TableHead className="w-[150px]">Status</TableHead>
-              <TableHead className="w-[20px]"></TableHead>
-              <TableHead className="w-[20px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {contracts.map((contract) => (
-              <TableRowContact contract={contract} key={contract.id} />
-            ))}
-          </TableBody>
-        </Table>
+        <div className="container flex max-h-[700px] w-full overflow-auto border-secondary bg-white p-5 [&::-webkit-scrollbar-thumb]:bg-red-500">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]"></TableHead>
+                <TableHead className="w-[150px]">CPF/CNPJ</TableHead>
+                <TableHead className="w-[200px]">Nome do contrato</TableHead>
+                <TableHead className="w-[200px]">Valor do contrato</TableHead>
+                <TableHead className="w-[150px]">Modalidade</TableHead>
+                <TableHead className="w-[150px]">Status</TableHead>
+                <TableHead className="w-[20px]"></TableHead>
+                <TableHead className="w-[20px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {contracts.map((contract) => (
+                <TableRowContact contract={contract} key={contract.id} />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

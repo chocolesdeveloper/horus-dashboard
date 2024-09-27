@@ -1,14 +1,12 @@
-import { db } from "@/app/lib/prisma";
-
-import { getServerSession } from "next-auth";
-
 import { formatMoney } from "@/app/(admin)/_utils/formart-money";
 
 import { Card } from "./_components/card";
-import { authOptions } from "@/app/_utils/authOptions";
 import { RevenueChart } from "./_components/revenue-chart";
 import { CreateContract } from "./_components/create-contract";
 import { getContracts, getModality } from "../db/queries";
+import { Button } from "@/components/ui/button";
+import { PlusCircleIcon } from "lucide-react";
+import { ButtonCreate } from "../_components/button";
 
 interface HomeProps {
   searchParams: {
@@ -18,7 +16,6 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const modalitys = await getModality();
   const contracts = await getContracts(
     searchParams.status,
     searchParams.modality,
@@ -35,29 +32,26 @@ export default async function Home({ searchParams }: HomeProps) {
   const contractProfit = contractValueTotal - contractRefundAmount;
 
   return (
-    <div className="container">
-      <div className="flex items-center justify-between border-b">
-        <h1 className="p-5 text-3xl font-bold tracking-tight">Home</h1>
+    <div className="container relative -mt-32 space-y-6">
+      <ButtonCreate />
 
-        <CreateContract modalitys={modalitys} />
-      </div>
-
-      <div className="mt-4 grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4 lg:gap-4">
         <Card
           description="Valor de contratos totais"
-          value={formatMoney(contractValueTotal)}
+          value={contractValueTotal}
+          type="total"
         />
         <Card
           description="Valor de desembolso"
-          value={formatMoney(contractRefundAmount)}
-          isUpOrDown="down"
+          value={contractRefundAmount}
+          type="income"
         />
+        <Card description="Lucro" value={contractProfit} type="expense" />
         <Card
-          description="Lucro"
-          value={formatMoney(contractProfit)}
-          isUpOrDown="up"
+          description="Total de contratos"
+          value={contracts.length}
+          type="contract"
         />
-        <Card description="Total de contratos" value={contracts.length} />
       </div>
 
       <div className="mt-5">
