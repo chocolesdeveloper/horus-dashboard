@@ -148,7 +148,11 @@ export function SearchFilter() {
           )}
         />
 
-        <Button type="submit" variant="secondary" className="w-full lg:w-fit">
+        <Button
+          type="submit"
+          variant="secondary"
+          className="relative -z-10 w-full lg:w-fit"
+        >
           <SearchIcon className="mr-2 h-4 w-4" />
           Filtrar
         </Button>
@@ -156,7 +160,7 @@ export function SearchFilter() {
           type="button"
           variant="outline"
           onClick={handleClearFilters}
-          className="w-full lg:w-fit"
+          className="relative -z-10 w-full lg:w-fit"
         >
           <X className="text- mr-2 h-4 w-4" />
           Remover

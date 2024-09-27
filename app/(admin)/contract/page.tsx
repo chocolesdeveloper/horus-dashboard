@@ -50,6 +50,8 @@ export default async function ContractPage({
       <div className="rounded-lg bg-white px-5 pt-5 shadow-xl">
         <SearchFilter />
 
+        {/* TODO: add message where no contract */}
+
         <div className="container flex max-h-[700px] w-full overflow-auto border-secondary bg-white p-5 [&::-webkit-scrollbar-thumb]:bg-red-500">
           <Table>
             <TableHeader>
