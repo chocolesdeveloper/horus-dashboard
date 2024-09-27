@@ -1,5 +1,3 @@
-import { formatMoney } from "@/app/(admin)/_utils/formart-money";
-
 import { Card } from "./_components/card";
 import { RevenueChart } from "./_components/revenue-chart";
 import { CreateContract } from "./_components/create-contract";

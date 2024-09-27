@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, Loader2Icon, PlusCircleIcon } from "lucide-react";
+import { CalendarIcon, Loader2Icon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { replaceDocument } from "../../_utils/replace-document";
@@ -29,7 +28,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/app/_utils/utils";
 import CurrencyInput from "react-currency-input-field";
 import { Modality, Prisma } from "@prisma/client";
@@ -42,6 +41,7 @@ import { getNameModality } from "../../contract/_utils/get-name-modality";
 import { useSession } from "next-auth/react";
 import { withCentavos } from "../../_utils/with-centavos";
 import { useNewContract } from "../../hooks/use-new-contract";
+import { db } from "@/app/lib/prisma";
 
 const createContractSchema = z.object({
   modalityId: z.string().min(1),
@@ -57,17 +57,6 @@ const createContractSchema = z.object({
 
 type CreateContractType = z.infer<typeof createContractSchema>;
 
-// interface CreateContractProps {
-//   modalitys: Modality[];
-// }
-
-const modalitys: any = [
-  {
-    id: "1",
-    name: "Contrato 1",
-  },
-];
-
 export function CreateContract() {
   const { isOpen, onClose } = useNewContract();
 
@@ -75,6 +64,8 @@ export function CreateContract() {
     new Date(),
   );
   const [contractTerm, setContractTerm] = useState<Date | undefined>(undefined);
+
+  const [modalities, setModalities] = useState<Modality[] | []>([]);
 
   const { data: user } = useSession();
 
@@ -155,6 +146,22 @@ export function CreateContract() {
     }
   }
 
+  useEffect(() => {
+    async function getModalities() {
+      try {
+        const response = await fetch("/api/modalities");
+        const result = await response.json();
+        console.log(result);
+
+        setModalities(result);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    }
+
+    getModalities();
+  }, []);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -183,11 +190,12 @@ export function CreateContract() {
                   </SelectTrigger>
 
                   <SelectContent>
-                    {modalitys.map((modality) => (
-                      <SelectItem key={modality.id} value={modality.id}>
-                        {getNameModality(modality.name)}
-                      </SelectItem>
-                    ))}
+                    {modalities &&
+                      modalities.map((modality) => (
+                        <SelectItem key={modality.id} value={modality.id}>
+                          {getNameModality(modality.name)}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               )}

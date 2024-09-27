@@ -11,7 +11,6 @@ import { TableRowContact } from "./_components/table-row-contract";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_utils/authOptions";
 import { Metadata } from "next";
-import { CreateContract } from "../(home)/_components/create-contract";
 import { getContractFilter, getModality } from "../db/queries";
 import { ButtonCreate } from "../_components/button";
 

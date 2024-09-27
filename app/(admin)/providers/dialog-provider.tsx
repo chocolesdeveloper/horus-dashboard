@@ -1,6 +1,7 @@
 "use client";
 
 import { useMountedState } from "react-use";
+
 import { CreateContract } from "../(home)/_components/create-contract";
 
 export function DialogProvider() {
