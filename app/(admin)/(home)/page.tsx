@@ -1,9 +1,6 @@
 import { Card } from "./_components/card";
 import { RevenueChart } from "./_components/revenue-chart";
-import { CreateContract } from "./_components/create-contract";
-import { getContracts, getModality } from "../db/queries";
-import { Button } from "@/components/ui/button";
-import { PlusCircleIcon } from "lucide-react";
+import { getContracts } from "../db/queries";
 import { ButtonCreate } from "../_components/button";
 
 interface HomeProps {
@@ -18,6 +15,10 @@ export default async function Home({ searchParams }: HomeProps) {
     searchParams.status,
     searchParams.modality,
   );
+
+  if (!contracts) {
+    return null;
+  }
 
   const contractValueTotal = contracts.reduce((acc, value) => {
     return acc + Number(value.contractValue);
