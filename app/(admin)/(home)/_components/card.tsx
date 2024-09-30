@@ -46,7 +46,7 @@ export function Card({ description, value, type }: CardProps) {
               prefix={type !== "contract" ? "R$ " : ""}
               duration={4}
             >
-              {({ countUpRef, start }) => <span ref={countUpRef} />}
+              {({ countUpRef }) => <span ref={countUpRef} />}
             </CountUp>
           )}
 
