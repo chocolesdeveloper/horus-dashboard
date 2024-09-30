@@ -40,17 +40,14 @@ export function Card({ description, value, type }: CardProps) {
           {mounted && (
             <CountUp
               start={0}
-              startOnMount
-              redraw
               end={value}
               decimals={type !== "contract" ? 2 : 0}
               separator="."
               decimal=","
               prefix={type !== "contract" ? "R$ " : ""}
-              duration={4}
-            >
-              {({ countUpRef }) => <span ref={countUpRef} />}
-            </CountUp>
+              duration={3}
+              delay={0}
+            />
           )}
 
           {type === "expense" && <TrendingUpIcon className="text-green-500" />}
