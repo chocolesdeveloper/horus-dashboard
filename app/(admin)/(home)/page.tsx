@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: HomeProps) {
   );
 
   if (!contracts) {
-    return null;
+    return <div>Loading...</div>; // Você pode customizar esse loading com um spinner ou animação
   }
 
   const contractValueTotal = contracts.reduce((acc, value) => {
