@@ -32,35 +32,33 @@ export function Card({ description, value, type }: CardProps) {
   }, []);
 
   return (
-    <div>
-      <CardUI className="flex h-32 flex-col justify-between p-5 shadow-lg">
-        <CardDescription>{description}</CardDescription>
-        <CardHeader className="p-0">
-          <CardTitle className="flex items-center justify-between">
-            {value}
+    <CardUI className="flex h-32 flex-col justify-between p-5 shadow-lg">
+      <CardDescription>{description}</CardDescription>
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between">
+          {/* {value} */}
+          {mounted && (
+            <CountUp
+              start={0}
+              startOnMount
+              redraw
+              end={value}
+              decimals={type !== "contract" ? 2 : 0}
+              separator="."
+              decimal=","
+              prefix={type !== "contract" ? "R$ " : ""}
+              duration={4}
+            >
+              {({ countUpRef }) => <span ref={countUpRef} />}
+            </CountUp>
+          )}
 
-            {type === "expense" && (
-              <TrendingUpIcon className="text-green-500" />
-            )}
-            {type === "income" && <TrendingDownIcon className="text-red-500" />}
-            {type === "contract" && <ReceiptText className="" />}
-            {type === "total" && <Receipt className="" />}
-          </CardTitle>
-        </CardHeader>
-      </CardUI>
-      {mounted && (
-        <CountUp
-          start={0}
-          end={value}
-          decimals={type !== "contract" ? 2 : 0}
-          separator="."
-          decimal=","
-          prefix={type !== "contract" ? "R$ " : ""}
-          duration={4}
-        >
-          {({ countUpRef }) => <span ref={countUpRef} />}
-        </CountUp>
-      )}
-    </div>
+          {type === "expense" && <TrendingUpIcon className="text-green-500" />}
+          {type === "income" && <TrendingDownIcon className="text-red-500" />}
+          {type === "contract" && <ReceiptText className="" />}
+          {type === "total" && <Receipt className="" />}
+        </CardTitle>
+      </CardHeader>
+    </CardUI>
   );
 }
