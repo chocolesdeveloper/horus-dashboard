@@ -23,8 +23,6 @@ interface CardProps {
 }
 
 export function Card({ description, value, type }: CardProps) {
-  console.log(Number(value));
-
   return (
     <CardUI className="flex h-32 flex-col justify-between p-5 shadow-lg">
       <CardDescription>{description}</CardDescription>

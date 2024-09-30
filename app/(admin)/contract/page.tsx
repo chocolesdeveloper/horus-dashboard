@@ -42,6 +42,8 @@ export default async function ContractPage({
     searchParams.status,
   );
 
+  console.log(contracts);
+
   return (
     <div className="container relative -top-32 flex flex-col gap-3">
       <ButtonCreate />

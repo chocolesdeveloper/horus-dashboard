@@ -64,7 +64,7 @@ export function ContractInfo({ contract }: ContractInfoProps) {
         {isUpdate ? (
           <UpdateContract
             contract={contract}
-            onSucessUpdate={onUpdateContract}
+            onSuccessUpdate={onUpdateContract}
           />
         ) : (
           <InfoComponent contract={contract} />

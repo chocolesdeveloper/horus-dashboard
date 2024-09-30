@@ -7,7 +7,17 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 interface updateContractProps {
-  contract: Contract & {
+  contract: {
+    name: string;
+    contracting: string;
+    document: string;
+    contractValue: string;
+    refundAmount: string;
+    companyHires: string;
+    contractDate: Date | undefined;
+    contractTerm: Date | undefined;
+    executedDate?: Date | undefined;
+    executedValue?: string;
     status: string;
     modality: string;
   };
@@ -46,7 +56,7 @@ export async function updateContract({ contract }: updateContractProps) {
   const updatedContract = await db.contract.update({
     where: {
       userId: user.user.id,
-      id: contract.id,
+      id: "599d44e6-d11f-47ba-94c5-d9234c33c122",
     },
     data: {
       name: contract.name,

@@ -50,14 +50,14 @@ interface UpdateContractProps {
       modality: true;
     };
   }>;
-  onSucessUpdate: () => void;
+  onSuccessUpdate: () => void;
 }
 
 export function UpdateContract({
   contract,
-  onSucessUpdate,
+  onSuccessUpdate,
 }: UpdateContractProps) {
-  const [pending, startTranstion] = useTransition();
+  const [pending, startTransition] = useTransition();
 
   const [contractDate, setContractDate] = useState<Date | undefined>(
     new Date(contract.contractDate),
@@ -104,13 +104,13 @@ export function UpdateContract({
     };
 
     try {
-      startTranstion(() => {
+      startTransition(() => {
         updateContract({
           contract: contractUpdate,
         });
       });
 
-      onSucessUpdate();
+      onSuccessUpdate();
 
       toast.success("Atualizado com sucesso!");
     } catch (error) {
@@ -122,6 +122,7 @@ export function UpdateContract({
 
   return (
     <form onSubmit={handleSubmit(handleUpdateContract)}>
+      <pre>{JSON.stringify(contract, null, 2)}</pre>
       <Table>
         <TableBody>
           <TableRow>
