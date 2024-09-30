@@ -2,6 +2,8 @@ import { Card } from "./_components/card";
 import { RevenueChart } from "./_components/revenue-chart";
 import { getContracts } from "../db/queries";
 import { ButtonCreate } from "../_components/button";
+import { Divide } from "lucide-react";
+import { Suspense } from "react";
 
 interface HomeProps {
   searchParams: {
@@ -16,10 +18,6 @@ export default async function Home({ searchParams }: HomeProps) {
     searchParams.modality,
   );
 
-  if (!contracts) {
-    return <div>Loading...</div>; // Você pode customizar esse loading com um spinner ou animação
-  }
-
   const contractValueTotal = contracts.reduce((acc, value) => {
     return acc + Number(value.contractValue);
   }, 0);
@@ -29,6 +27,10 @@ export default async function Home({ searchParams }: HomeProps) {
   }, 0);
 
   const contractProfit = contractValueTotal - contractRefundAmount;
+
+  if (contracts.length === 0) {
+    return <div>test</div>;
+  }
 
   return (
     <div className="container relative -mt-32 space-y-6">

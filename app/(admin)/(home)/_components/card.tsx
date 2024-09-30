@@ -18,7 +18,7 @@ import CountUp from "react-countup";
 
 interface CardProps {
   description: string;
-  value: string | number;
+  value: number;
   type?: "total" | "income" | "expense" | "contract";
 }
 
@@ -28,7 +28,9 @@ export function Card({ description, value, type }: CardProps) {
       <CardDescription>{description}</CardDescription>
       <CardHeader className="p-0">
         <CardTitle className="flex items-center justify-between">
-          <CountUp
+          {value}
+
+          {/* <CountUp
             start={0}
             end={Number(value)}
             decimals={type !== "contract" ? 2 : 0}
@@ -38,7 +40,7 @@ export function Card({ description, value, type }: CardProps) {
             duration={4}
           >
             {({ countUpRef, start }) => <span ref={countUpRef} />}
-          </CountUp>
+          </CountUp> */}
 
           {type === "expense" && <TrendingUpIcon className="text-green-500" />}
           {type === "income" && <TrendingDownIcon className="text-red-500" />}
