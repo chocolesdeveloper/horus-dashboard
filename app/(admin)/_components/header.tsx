@@ -49,8 +49,6 @@ export function Header() {
     locale: ptBR,
   });
 
-  console.log(day);
-
   return (
     <header className="h-16 bg-horus pb-72 lg:h-20">
       <div className="container flex w-full flex-col justify-between gap-5 p-3 lg:gap-10 lg:py-5">

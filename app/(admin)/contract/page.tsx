@@ -42,10 +42,8 @@ export default async function ContractPage({
     searchParams.status,
   );
 
-  console.log(contracts);
-
   return (
-    <div className="container relative -top-32 flex flex-col gap-3">
+    <div className="container -mt-32 flex flex-col gap-3">
       <ButtonCreate />
 
       <div className="rounded-lg bg-white px-5 pt-5 shadow-xl">
@@ -53,7 +51,7 @@ export default async function ContractPage({
 
         {/* TODO: add message where no contract */}
 
-        <div className="container flex max-h-[700px] w-full overflow-auto border-secondary bg-white p-5 [&::-webkit-scrollbar-thumb]:bg-red-500">
+        <div className="container flex max-h-[700px] w-full overflow-auto border-secondary bg-white p-5 ">
           <Table>
             <TableHeader>
               <TableRow>

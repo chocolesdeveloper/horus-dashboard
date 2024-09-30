@@ -78,16 +78,6 @@ export function SearchFilter() {
         className="flex flex-wrap items-center justify-center gap-4"
         onSubmit={handleSubmit(handleFilter)}
       >
-        <Input
-          placeholder="CPF/CNPJ"
-          className="w-full lg:w-[250px]"
-          {...register("document")}
-        />
-        <Input
-          placeholder="Nome do contrato"
-          className="w-full lg:w-[250px]"
-          {...register("name")}
-        />
         <Controller
           name="modality"
           control={control}
@@ -129,7 +119,7 @@ export function SearchFilter() {
               value={value}
               disabled={disabled}
             >
-              <SelectTrigger className="w-full lg:w-[180px]">
+              <SelectTrigger className="relative w-full lg:w-[180px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -138,7 +128,7 @@ export function SearchFilter() {
                   <SelectItem
                     value={modality.value}
                     key={modality.name}
-                    className="capitalize"
+                    className="relative z-50 capitalize"
                   >
                     {modality.name}
                   </SelectItem>
@@ -147,22 +137,32 @@ export function SearchFilter() {
             </Select>
           )}
         />
+        <Input
+          placeholder="CPF/CNPJ"
+          className="w-full lg:w-[250px]"
+          {...register("document")}
+        />
+        <Input
+          placeholder="Nome do contrato"
+          className="w-full lg:w-[250px]"
+          {...register("name")}
+        />
 
         <Button
           type="submit"
           variant="secondary"
-          className="relative -z-10 w-full lg:w-fit"
+          className="relative w-full lg:w-fit"
         >
           <SearchIcon className="mr-2 h-4 w-4" />
           Filtrar
         </Button>
         <Button
           type="button"
-          variant="outline"
+          variant="destructive"
           onClick={handleClearFilters}
-          className="relative -z-10 w-full lg:w-fit"
+          className="w-full lg:w-fit"
         >
-          <X className="text- mr-2 h-4 w-4" />
+          <X className="mr-2 h-4 w-4" />
           Remover
         </Button>
       </form>
