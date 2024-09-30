@@ -9,6 +9,7 @@ interface GridCardProps {
   contracts: Contract[];
 }
 export function GridCard({ contracts }: GridCardProps) {
+  // TODO: criar um hook para o mounted
   const [isMounted, setIsMounted] = useState(true);
 
   const contractValueTotal = contracts.reduce((acc, value) => {

@@ -24,6 +24,7 @@ interface CardProps {
 }
 
 export function Card({ description, value, type }: CardProps) {
+  // TODO: criar um hook para o mounted
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export function Card({ description, value, type }: CardProps) {
           {mounted && (
             <CountUp
               start={0}
-              end={Number(value)}
+              end={value}
               decimals={type !== "contract" ? 2 : 0}
               separator="."
               decimal=","
