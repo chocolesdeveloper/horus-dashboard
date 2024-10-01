@@ -122,7 +122,6 @@ export function UpdateContract({
 
   return (
     <form onSubmit={handleSubmit(handleUpdateContract)}>
-      <pre>{JSON.stringify(contract, null, 2)}</pre>
       <Table>
         <TableBody>
           <TableRow>

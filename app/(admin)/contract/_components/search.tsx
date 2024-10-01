@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,23 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { X, SearchIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+
 import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-const MODALITYS = [
-  { name: "Privado", value: "private" },
-  { name: "Pregão", value: "auction" },
-  { name: "Licitação", value: "bidding" },
-];
+import qs from "query-string";
 
-const STATUS = [
-  { name: "Finalizado", value: "finished" },
-  { name: "Em progresso", value: "progress" },
-  { name: "Concluído", value: "concluded" },
-];
+import { MODALITIES, STATUS } from "@/constants/contracts";
 
 const searchFilterSchema = z.object({
   document: z.string().optional(),
@@ -38,6 +33,7 @@ type SearchFilterSchema = z.infer<typeof searchFilterSchema>;
 
 export function SearchFilter() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const { handleSubmit, register, control, reset } =
     useForm<SearchFilterSchema>({
@@ -45,20 +41,25 @@ export function SearchFilter() {
     });
 
   function handleFilter(data: SearchFilterSchema) {
-    const modality = !["private", "auction", "bidding"].includes(
-      data.modality ?? "",
-    )
-      ? ""
-      : data.modality;
-    const status = !["finished", "progress", "concluded"].includes(
-      data.status ?? "",
-    )
-      ? ""
-      : data.status;
+    const query: SearchFilterSchema = {
+      document: data?.document?.replace(/\D/g, ""),
+      modality: data.modality === "all" ? undefined : data.modality,
+      status: data.status === "all" ? undefined : data.status,
+      name: data.name,
+    };
 
-    router.push(
-      `/contract?${data.document ? `document=${data.document.replace(/\D/g, "") || ""}` : ""}${data.name ? `&name=${data.name || ""}` : ""}${modality ? `&modality=${modality === "all" ? "" : modality}` : ""}${status ? `&status=${status}` : ""}`,
+    const url = qs.stringifyUrl(
+      {
+        url: pathname,
+        query,
+      },
+      {
+        skipEmptyString: true,
+        skipNull: true,
+      },
     );
+
+    router.push(url);
   }
 
   function handleClearFilters() {
@@ -71,6 +72,8 @@ export function SearchFilter() {
 
     router.push("/contract");
   }
+
+  // TODO: arrumar os botao de pesquisa
 
   return (
     <div className="flex flex-col gap-4">
@@ -94,7 +97,7 @@ export function SearchFilter() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Modalidades</SelectItem>
-                {MODALITYS.map((modality) => (
+                {MODALITIES.map((modality) => (
                   <SelectItem
                     value={modality.value}
                     key={modality.name}

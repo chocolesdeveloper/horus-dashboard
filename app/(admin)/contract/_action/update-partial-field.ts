@@ -16,8 +16,6 @@ export async function UpdatePartialField({
   executedDate,
   executedValue,
 }: UpdatePartialFieldProps): Promise<Contract> {
-  console.log(executedValue);
-
   const contract = await db.contract.findFirst({
     where: {
       id: contractId,

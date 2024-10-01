@@ -8,11 +8,12 @@ import {
 
 import { SearchFilter } from "./_components/search";
 import { TableRowContact } from "./_components/table-row-contract";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/_utils/authOptions";
+
 import { Metadata } from "next";
 import { getContractFilter, getModality } from "../db/queries";
 import { ButtonCreate } from "../_components/button";
+import { getUpdateModality } from "../db/update";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Contratos",
@@ -29,11 +30,7 @@ interface ContractPageProps {
 export default async function ContractPage({
   searchParams,
 }: ContractPageProps) {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return null;
-  }
+  await getUpdateModality();
 
   const contracts = await getContractFilter(
     searchParams.document,
@@ -48,8 +45,6 @@ export default async function ContractPage({
 
       <div className="rounded-lg bg-white px-5 pt-5 shadow-xl">
         <SearchFilter />
-
-        {/* TODO: add message where no contract */}
 
         <div className="container flex max-h-[700px] w-full overflow-auto border-secondary bg-white p-5 ">
           <Table>
@@ -72,6 +67,27 @@ export default async function ContractPage({
             </TableBody>
           </Table>
         </div>
+
+        {contracts.length === 0 && (
+          <div className="container flex h-[700px] w-full flex-col items-center justify-center overflow-auto border-secondary bg-white p-5 text-center">
+            <Image
+              src="/no-found.gif"
+              alt="gato preto animado"
+              width={300}
+              height={300}
+              className="object-cover"
+            />
+
+            <h3 className="text-xl lg:text-3xl">
+              Parece que o <span className="font-bold">Mike</span> não achou
+              nada aqui...
+            </h3>
+
+            <p className="text-sm lg:font-light">
+              Tente pesquisar novamente ou crie um contrato.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

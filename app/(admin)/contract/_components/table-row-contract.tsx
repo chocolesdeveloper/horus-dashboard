@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/app/(admin)/_utils/formart-money";
 import { getNameModality } from "../_utils/get-name-modality";
 import { replaceDocument } from "../../_utils/replace-document";
+import { getUpdateModality } from "../../db/update";
 
 interface TableRowContactProps {
   contract: Prisma.ContractGetPayload<{
@@ -17,7 +18,7 @@ interface TableRowContactProps {
   }>;
 }
 
-export function TableRowContact({ contract }: TableRowContactProps) {
+export async function TableRowContact({ contract }: TableRowContactProps) {
   let documentReplace = "";
 
   if (contract.document.length === 11) {

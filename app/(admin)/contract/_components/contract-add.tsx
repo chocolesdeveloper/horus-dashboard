@@ -1,5 +1,24 @@
 "use client";
 
+import { useState } from "react";
+
+import { cn } from "@/app/_utils/utils";
+
+import { Prisma } from "@prisma/client";
+
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { CalendarIcon, PlusCircleIcon } from "lucide-react";
+
+import { format, isAfter } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+import { toast } from "sonner";
+
+import CurrencyInput from "react-currency-input-field";
+
 import {
   Dialog,
   DialogClose,
@@ -7,27 +26,16 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { format, isAfter } from "date-fns";
-import { Prisma } from "@prisma/client";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/app/_utils/utils";
-import { CalendarIcon, PlusCircleIcon } from "lucide-react";
-import { ptBR } from "date-fns/locale";
+
 import { UpdatePartialField } from "../_action/update-partial-field";
-import { toast } from "sonner";
 import { updateConcluded } from "../_action/update-concluded";
-import CurrencyInput from "react-currency-input-field";
 import { withCentavos } from "../../_utils/with-centavos";
 
 const ContractAddSchema = z.object({
