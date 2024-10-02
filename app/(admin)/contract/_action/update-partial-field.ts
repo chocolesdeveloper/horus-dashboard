@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/lib/prisma";
-import { Contract } from "@prisma/client";
+import { Contract, Prisma } from "@prisma/client";
 import { error } from "console";
 import { revalidatePath } from "next/cache";
 

@@ -7,18 +7,18 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
-  XAxis,
   YAxis,
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { Contract, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { SelectType } from "./select-type";
 import { useRouter } from "next/navigation";
 import { SelectStatus } from "./select-status";
+import { IContractSerialized } from "@/app/types/contract-serialized";
 
 interface RevenueChartProps {
-  contracts: Contract[];
+  contracts: IContractSerialized[];
 }
 
 export function RevenueChart({ contracts }: RevenueChartProps) {

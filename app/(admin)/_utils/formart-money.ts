@@ -1,5 +1,5 @@
-export function formatMoney(money: number): string {
-  return money.toLocaleString("pt-BR", {
+export function formatMoney(money: number | string): string {
+  return Number(money).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
     maximumFractionDigits: 2,

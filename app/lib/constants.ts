@@ -4,7 +4,7 @@ export const STATUS = [
   { value: "finished", name: "Finalizado" },
 ];
 
-export const MODALITYS = [
+export const MODALITIES = [
   { value: "private", name: "Privado" },
   { value: "auction", name: "Pregão" },
   { value: "bidding", name: "Licitação" },

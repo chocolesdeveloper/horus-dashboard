@@ -29,13 +29,13 @@ model Contract {
   contracting   String
   document      String
   address       String
-  contractValue Decimal   @db.Decimal(10, 2)
-  refundAmount  Decimal   @db.Decimal(10, 2)
+  contractValue Decimal   @db.Decimal(20, 2)
+  refundAmount  Decimal   @db.Decimal(20, 2)
   companyHires  String
   contractDate  DateTime
   contractTerm  DateTime
   executedDate  DateTime?
-  executedValue Decimal?  @db.Decimal(10, 2)
+  executedValue Decimal?  @db.Decimal(20, 2)
 
   user     User     @relation(fields: [userId], references: [id])
   status   Status   @relation(fields: [statusId], references: [id])

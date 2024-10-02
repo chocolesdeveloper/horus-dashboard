@@ -7,15 +7,19 @@ import { Prisma } from "@prisma/client";
 import { formatMoney } from "@/app/(admin)/_utils/formart-money";
 import { getNameModality } from "../_utils/get-name-modality";
 import { replaceDocument } from "../../_utils/replace-document";
-import { getUpdateModality } from "../../db/update";
+import { IContractSerialized } from "@/app/types/contract-serialized";
 
 interface TableRowContactProps {
-  contract: Prisma.ContractGetPayload<{
-    include: {
-      status: true;
-      modality: true;
+  contract: IContractSerialized & {
+    status: {
+      id: string;
+      name: string;
     };
-  }>;
+    modality: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
 export async function TableRowContact({ contract }: TableRowContactProps) {
@@ -34,7 +38,7 @@ export async function TableRowContact({ contract }: TableRowContactProps) {
       </TableCell>
       <TableCell>{documentReplace}</TableCell>
       <TableCell>{contract.name}</TableCell>
-      <TableCell>{formatMoney(Number(contract.contractValue))}</TableCell>
+      <TableCell>{formatMoney(contract.contractValue)}</TableCell>
       <TableCell>{getNameModality(contract.modality.name)}</TableCell>
       <TableCell>
         <OrderStatus status={contract.status.name} />

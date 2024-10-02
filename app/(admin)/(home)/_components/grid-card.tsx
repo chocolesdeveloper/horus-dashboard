@@ -1,12 +1,12 @@
 "use client";
 
-import { Contract } from "@prisma/client";
 import { Card } from "./card";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { IContractSerialized } from "@/app/types/contract-serialized";
 
 interface GridCardProps {
-  contracts: Contract[];
+  contracts: IContractSerialized[];
 }
 export function GridCard({ contracts }: GridCardProps) {
   // TODO: criar um hook para o mounted

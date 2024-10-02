@@ -1,3 +1,6 @@
+import { Metadata } from "next";
+import Image from "next/image";
+
 import {
   Table,
   TableBody,
@@ -8,12 +11,10 @@ import {
 
 import { SearchFilter } from "./_components/search";
 import { TableRowContact } from "./_components/table-row-contract";
-
-import { Metadata } from "next";
-import { getContractFilter, getModality } from "../db/queries";
 import { ButtonCreate } from "../_components/button";
-import { getUpdateModality } from "../db/update";
-import Image from "next/image";
+
+import { getContractFilter } from "../db/queries";
+import { updateModality } from "../db/update";
 
 export const metadata: Metadata = {
   title: "Contratos",
@@ -30,7 +31,7 @@ interface ContractPageProps {
 export default async function ContractPage({
   searchParams,
 }: ContractPageProps) {
-  await getUpdateModality();
+  await updateModality();
 
   const contracts = await getContractFilter(
     searchParams.document,

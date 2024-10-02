@@ -27,7 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MODALITYS, STATUS } from "@/app/lib/constants";
+import { MODALITIES, STATUS } from "@/app/lib/constants";
+import { IContractSerialized } from "@/app/types/contract-serialized";
+import { withCentavos } from "../../_utils/with-centavos";
 
 const updateContractSchema = z.object({
   status: z.string().min(1),
@@ -44,12 +46,16 @@ const updateContractSchema = z.object({
 type UpdateContractType = z.infer<typeof updateContractSchema>;
 
 interface UpdateContractProps {
-  contract: Prisma.ContractGetPayload<{
-    include: {
-      status: true;
-      modality: true;
+  contract: IContractSerialized & {
+    status: {
+      id: string;
+      name: string;
     };
-  }>;
+    modality: {
+      id: string;
+      name: string;
+    };
+  };
   onSuccessUpdate: () => void;
 }
 
@@ -95,6 +101,9 @@ export function UpdateContract({
     const contractUpdate = {
       ...data,
       id: contract.id,
+      executedValue: withCentavos(data.executedValue),
+      contractValue: withCentavos(data.contractValue),
+      refundAmount: withCentavos(data.refundAmount),
       document: documentWithoutDot,
       contractDate,
       contractTerm,
@@ -171,7 +180,7 @@ export function UpdateContract({
                     </SelectTrigger>
 
                     <SelectContent>
-                      {MODALITYS.map(({ value, name }) => (
+                      {MODALITIES.map(({ value, name }) => (
                         <SelectItem key={value} value={value}>
                           {name}
                         </SelectItem>

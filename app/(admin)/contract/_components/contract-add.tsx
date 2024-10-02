@@ -8,7 +8,7 @@ import { Prisma } from "@prisma/client";
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { number, z } from "zod";
 
 import { CalendarIcon, PlusCircleIcon } from "lucide-react";
 
@@ -37,6 +37,8 @@ import {
 import { UpdatePartialField } from "../_action/update-partial-field";
 import { updateConcluded } from "../_action/update-concluded";
 import { withCentavos } from "../../_utils/with-centavos";
+import { formatMoney } from "../../_utils/formart-money";
+import { IContractSerialized } from "@/app/types/contract-serialized";
 
 const ContractAddSchema = z.object({
   executedDate: z.date().optional(),
@@ -45,13 +47,16 @@ const ContractAddSchema = z.object({
 
 type ContractAddFormType = z.infer<typeof ContractAddSchema>;
 
+interface IContractSerializedWithStatus extends IContractSerialized {
+  status: {
+    id: string;
+    name: string;
+  };
+}
+
 interface ContractAddProps {
   contract: Pick<
-    Prisma.ContractGetPayload<{
-      include: {
-        status: true;
-      };
-    }>,
+    IContractSerializedWithStatus,
     "contractValue" | "executedValue" | "contractTerm" | "id" | "status"
   >;
 }
@@ -61,6 +66,8 @@ export function ContractAdd({ contract }: ContractAddProps) {
 
   const remaining =
     Number(contract.contractValue) - Number(contract.executedValue);
+
+  const valueFinished = formatMoney(remaining);
 
   const isPassed = isAfter(new Date(), contract.contractTerm);
 
@@ -77,13 +84,16 @@ export function ContractAdd({ contract }: ContractAddProps) {
   });
 
   async function handleUpdateContract(data: ContractAddFormType) {
+    console.log(data.executedValue);
+    console.log(Number(data.executedValue));
+    console.log(withCentavos(data.executedValue) * 100);
+
     try {
       const contractResponse = await UpdatePartialField({
         contractId: contract.id,
         executedDate: date,
         executedValue: withCentavos(data.executedValue),
       });
-
       if (contractResponse.executedValue === contractResponse.contractValue) {
         updateConcluded(contractResponse.id);
       }
@@ -108,19 +118,20 @@ export function ContractAdd({ contract }: ContractAddProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="p-5">
         <DialogHeader>
-          <DialogHeader className="text-2xl tracking-tight">
-            Atualização de contrato
+          <DialogHeader className="flex-col items-center text-2xl tracking-tight">
+            Atualização de execução
+            <span className="text-sm">Valor restante {valueFinished}</span>
           </DialogHeader>
         </DialogHeader>
 
         <form
           onSubmit={handleSubmit(handleUpdateContract)}
-          className="flex flex-col gap-4"
+          className="flex w-full flex-col gap-4"
         >
           <label htmlFor="executedDate" className="flex items-center gap-2">
-            <span className="w-32">Data executada:</span>
+            <span className="w-12">Data</span>
             <Controller
               control={control}
               name="executedDate"
@@ -130,7 +141,7 @@ export function ContractAdd({ contract }: ContractAddProps) {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[280px] flex-1 justify-start text-left font-normal capitalize",
+                        "flex-1 justify-start text-left font-normal capitalize",
                         !date && "text-muted-foreground",
                       )}
                     >
@@ -162,8 +173,8 @@ export function ContractAdd({ contract }: ContractAddProps) {
             htmlFor="executedValue"
             className="flex flex-col items-center gap-2"
           >
-            <div className="flex w-full items-center gap-2">
-              <span className="w-48">Valor executado:</span>
+            <div className="flex w-full items-center gap-3">
+              <span className="w-12">Valor</span>
               <Controller
                 control={control}
                 name="executedValue"
@@ -175,8 +186,10 @@ export function ContractAdd({ contract }: ContractAddProps) {
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="R$ 0.000.000"
                     prefix="R$"
-                    allowDecimals
+                    decimalScale={2}
                     decimalsLimit={2}
+                    decimalSeparator=","
+                    groupSeparator="."
                     intlConfig={{
                       locale: "pt-BR",
                       currency: "BRL",
@@ -191,7 +204,11 @@ export function ContractAdd({ contract }: ContractAddProps) {
             </p>
           </label>
           <DialogClose asChild>
-            <Button className="w-full text-accent-foreground" type="submit">
+            <Button
+              className="w-full text-accent-foreground"
+              variant="horus"
+              type="submit"
+            >
               Atualizar
             </Button>
           </DialogClose>

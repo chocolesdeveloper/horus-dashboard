@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 const schemaForm = z.object({
   name: z.string(),
@@ -19,12 +19,12 @@ const schemaForm = z.object({
   status: z.string(),
   executedDate: z.string(),
   executedValue: z.coerce.number().min(1),
-})
+});
 
-type dataFormType = z.infer<typeof schemaForm>
+type dataFormType = z.infer<typeof schemaForm>;
 
 export function Form() {
-  const [datad, setData] = useState<dataFormType>()
+  const [datad, setData] = useState<dataFormType>();
 
   const {
     handleSubmit,
@@ -32,16 +32,14 @@ export function Form() {
     formState: { errors },
   } = useForm<dataFormType>({
     resolver: zodResolver(schemaForm),
-  })
+  });
 
-  const lucro = datad?.contractValue! - datad?.refundAmount!
-  const rentabilidate = (lucro / datad?.contractValue!) * 100
-  const total = datad?.contractValue! - datad?.executedValue!
+  const lucro = datad?.contractValue! - datad?.refundAmount!;
+  const rentabilidate = (lucro / datad?.contractValue!) * 100;
+  const total = datad?.contractValue! - datad?.executedValue!;
 
   function handleSubmitData(data: dataFormType) {
-    // console.log(data)
-
-    setData(data)
+    setData(data);
   }
 
   return (
@@ -50,29 +48,54 @@ export function Form() {
         <p>{errors.refundAmount?.message}</p>
         <label htmlFor="name">
           Name:
-          <input type="text" {...register("name")} id="name" placeholder="name" />
+          <input
+            type="text"
+            {...register("name")}
+            id="name"
+            placeholder="name"
+          />
         </label>
         <label htmlFor="contracting">
           Contrante:
-          <input {...register("contracting")} id="contracting" placeholder="contracting" />
+          <input
+            {...register("contracting")}
+            id="contracting"
+            placeholder="contracting"
+          />
         </label>
         <label htmlFor="document">
           CNPJ/CPF:
-          <input {...register("document")} id="document" placeholder="document" />
+          <input
+            {...register("document")}
+            id="document"
+            placeholder="document"
+          />
         </label>
         <label htmlFor="address">
           Endereco:
           <input {...register("address")} id="address" placeholder="address" />
         </label>
         Valor do contrato:
-        <input {...register("contractValue")} id="contractValue" placeholder="contractValue" />
+        <input
+          {...register("contractValue")}
+          id="contractValue"
+          placeholder="contractValue"
+        />
         <label htmlFor="refundAmount">
           Valor de desembolso:
-          <input {...register("refundAmount")} id="refundAmount" placeholder="refundAmount" />
+          <input
+            {...register("refundAmount")}
+            id="refundAmount"
+            placeholder="refundAmount"
+          />
         </label>
         <label htmlFor="companyHires">
           Empresa contrata:
-          <input {...register("companyHires")} id="companyHires" placeholder="conpanyHires" />
+          <input
+            {...register("companyHires")}
+            id="companyHires"
+            placeholder="conpanyHires"
+          />
         </label>
         <label htmlFor="contractDate">
           Data do contrato:
@@ -107,10 +130,14 @@ export function Form() {
         </label>
         <label htmlFor="executedValue">
           Valor executado
-          <input {...register("executedValue")} id="executedValue" placeholder="executedValue" />
+          <input
+            {...register("executedValue")}
+            id="executedValue"
+            placeholder="executedValue"
+          />
         </label>
         <button type="submit">enviar</button>
       </form>
     </section>
-  )
+  );
 }

@@ -16,6 +16,8 @@ export default async function Home({ searchParams }: HomeProps) {
     searchParams.modality,
   );
 
+  console.log((22.0).toString());
+
   return (
     <div className="container relative -mt-32 space-y-6">
       <ButtonCreate />

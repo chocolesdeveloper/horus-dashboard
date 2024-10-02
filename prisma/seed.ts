@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function main() {
   try {
     // Criar modalidades
-    const modalitys = [
+    const modalities = [
       { name: "private" },
       { name: "auction" },
       { name: "bidding" },
@@ -44,7 +44,7 @@ async function main() {
     for (let i = 0; i < 3; i++) {
       const modalityCreate = await prisma.modality.create({
         data: {
-          name: modalitys[i].name,
+          name: modalities[i].name,
         },
       });
 

@@ -26,7 +26,14 @@ export const getContracts = cache(async (status: string, modality: string) => {
     },
   });
 
-  return data;
+  const serializedData = data.map((contract) => ({
+    ...contract,
+    contractValue: contract.contractValue.toString(),
+    refundAmount: contract.refundAmount.toString(),
+    executedValue: contract.executedValue?.toString() || null,
+  }));
+
+  return serializedData;
 });
 
 export const getContractFilter = cache(
@@ -74,7 +81,14 @@ export const getContractFilter = cache(
       },
     });
 
-    return data;
+    const serializedData = data.map((contract) => ({
+      ...contract,
+      contractValue: contract.contractValue.toString(),
+      refundAmount: contract.refundAmount.toString(),
+      executedValue: contract.executedValue?.toString() || null,
+    }));
+
+    return serializedData;
   },
 );
 

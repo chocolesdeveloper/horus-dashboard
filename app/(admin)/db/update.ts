@@ -1,8 +1,9 @@
 import { db } from "@/app/lib/prisma";
 import { isAfter } from "date-fns";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
-export async function getUpdateModality() {
+export const updateModality = cache(async () => {
   const contracts = await db.contract.findMany();
 
   contracts.map(async (contract) => {
@@ -21,4 +22,4 @@ export async function getUpdateModality() {
   });
 
   revalidatePath("/contract");
-}
+});

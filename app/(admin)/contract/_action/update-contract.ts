@@ -2,22 +2,22 @@
 
 import { authOptions } from "@/app/_utils/authOptions";
 import { db } from "@/app/lib/prisma";
-import { Contract } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 interface updateContractProps {
   contract: {
+    id: string;
     name: string;
     contracting: string;
     document: string;
-    contractValue: string;
-    refundAmount: string;
+    contractValue: number;
+    refundAmount: number;
     companyHires: string;
     contractDate: Date | undefined;
     contractTerm: Date | undefined;
     executedDate?: Date | undefined;
-    executedValue?: string;
+    executedValue?: number;
     status: string;
     modality: string;
   };
@@ -39,6 +39,8 @@ export async function updateContract({ contract }: updateContractProps) {
     },
   });
 
+  console.log(statusId);
+
   if (!statusId) {
     throw new Error("Status not found");
   }
@@ -56,7 +58,7 @@ export async function updateContract({ contract }: updateContractProps) {
   const updatedContract = await db.contract.update({
     where: {
       userId: user.user.id,
-      id: "599d44e6-d11f-47ba-94c5-d9234c33c122",
+      id: contract.id,
     },
     data: {
       name: contract.name,
@@ -76,5 +78,5 @@ export async function updateContract({ contract }: updateContractProps) {
 
   revalidatePath("/contract");
 
-  return;
+  return { updatedContract };
 }

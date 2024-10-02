@@ -14,14 +14,19 @@ import { Prisma } from "@prisma/client";
 import { useState } from "react";
 import { InfoComponent } from "./info";
 import { UpdateContract } from "./update-contract";
+import { IContractSerialized } from "@/app/types/contract-serialized";
 
 interface ContractInfoProps {
-  contract: Prisma.ContractGetPayload<{
-    include: {
-      status: true;
-      modality: true;
+  contract: IContractSerialized & {
+    status: {
+      id: string;
+      name: string;
     };
-  }>;
+    modality: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
 export function ContractInfo({ contract }: ContractInfoProps) {

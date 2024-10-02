@@ -4,15 +4,20 @@ import { formatMoney } from "../../_utils/formart-money";
 import { formatCpfCnpj } from "../_utils/format-cpf-cnpj";
 import { OrderStatus } from "./order-stauts";
 import { Prisma } from "@prisma/client";
-import { MODALITYS } from "@/app/lib/constants";
+import { MODALITIES } from "@/app/lib/constants";
+import { IContractSerialized } from "@/app/types/contract-serialized";
 
 interface InfoProps {
-  contract: Prisma.ContractGetPayload<{
-    include: {
-      status: true;
-      modality: true;
+  contract: IContractSerialized & {
+    status: {
+      id: string;
+      name: string;
     };
-  }>;
+    modality: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
 export function InfoComponent({ contract }: InfoProps) {
@@ -21,7 +26,7 @@ export function InfoComponent({ contract }: InfoProps) {
     (profit / Number(contract.contractValue)) * 100,
   );
 
-  const modality = MODALITYS.find(
+  const modality = MODALITIES.find(
     (modality) => modality.value === contract.modality.name,
   );
 

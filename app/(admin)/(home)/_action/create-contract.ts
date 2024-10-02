@@ -3,15 +3,16 @@
 import { db } from "@/app/lib/prisma";
 import { Contract } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
-import { validateCpf } from "../../_utils/validate-cpf";
-import { validateCnpj } from "../../_utils/validate-cnpj";
+import { IContractSerialized } from "@/app/types/contract-serialized";
+import { documentValidate } from "@/app/_utils/validation";
 
 interface CreateContractProps {
   contract: Omit<
-    Contract,
+    IContractSerialized,
     "executedDate" | "executedValue" | "statusId" | "id" | "createdAt"
-  >;
+  > & {
+    modality?: string;
+  };
   isCpf?: boolean;
 }
 
@@ -19,6 +20,8 @@ export async function createContract({
   contract,
   isCpf = false,
 }: CreateContractProps): Promise<Contract | unknown> {
+  //TODO: chegar todo create contract
+
   const status = await db.status.findMany({
     where: {
       name: {
@@ -27,33 +30,20 @@ export async function createContract({
     },
   });
 
-  if (isCpf) {
-    let isValidateCpf = validateCpf(contract.document);
+  const modalityId = await db.modality.findFirst({
+    where: {
+      name: contract.modalityId,
+    },
+  });
 
-    if (!isValidateCpf) {
-      return new NextResponse(
-        JSON.stringify({
-          error: "CPF inválido",
-        }),
-        {
-          status: 401,
-        },
-      );
-    }
-  } else {
-    let isValidateCnpj = validateCnpj(contract.document);
+  if (!status || !modalityId) {
+    throw new Error("Could not find status or modality");
+  }
 
-    if (!isValidateCnpj) {
-      throw new Error("CNPJ inválido");
-      //   return new NextResponse(
-      //     JSON.stringify({
-      //       error: "CNPJ inválido",
-      //     }),
-      //     {
-      //       status: 401,
-      //     },
-      //   );
-    }
+  const validation = documentValidate(contract.document, isCpf);
+
+  if (!validation) {
+    throw new Error("Document invalid");
   }
 
   const contractCreate = await db.contract.create({
@@ -67,8 +57,8 @@ export async function createContract({
       companyHires: contract.companyHires,
       contractDate: contract.contractDate,
       contractTerm: contract.contractTerm,
-      modalityId: contract.modalityId,
-      statusId: status[0].id,
+      modalityId: modalityId.id,
+      statusId: status[0]?.id,
       userId: contract.userId,
     },
   });

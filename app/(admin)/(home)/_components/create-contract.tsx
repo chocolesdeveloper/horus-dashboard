@@ -1,6 +1,28 @@
 "use client";
 
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+import { toast } from "sonner";
+
+import { CalendarIcon, Loader2Icon } from "lucide-react";
+
+import CurrencyInput from "react-currency-input-field";
+
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Dialog,
   DialogContent,
@@ -15,36 +37,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, Loader2Icon } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { replaceDocument } from "../../_utils/replace-document";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Calendar } from "@/components/ui/calendar";
-import { useEffect, useState } from "react";
-import { cn } from "@/app/_utils/utils";
-import CurrencyInput from "react-currency-input-field";
-import { Modality, Prisma } from "@prisma/client";
-import { createContract } from "../_action/create-contract";
-import { toast } from "sonner";
 
-import { validateCpf } from "../../_utils/validate-cpf";
-import { validateCnpj } from "../../_utils/validate-cnpj";
-import { getNameModality } from "../../contract/_utils/get-name-modality";
-import { useSession } from "next-auth/react";
+import { replaceDocument } from "../../_utils/replace-document";
 import { withCentavos } from "../../_utils/with-centavos";
+import { documentValidate } from "@/app/_utils/validation";
+
+import { cn } from "@/app/_utils/utils";
+
+import { createContract } from "../_action/create-contract";
 import { useNewContract } from "../../hooks/use-new-contract";
-import { db } from "@/app/lib/prisma";
+
+import { MODALITIES } from "@/app/lib/constants";
 
 const createContractSchema = z.object({
-  modalityId: z.string().min(1),
+  modality: z.string().min(1),
   name: z.string().min(1),
   contracting: z.string().min(1),
   document: z.string().min(1),
@@ -65,8 +71,6 @@ export function CreateContract() {
   );
   const [contractTerm, setContractTerm] = useState<Date | undefined>(undefined);
 
-  const [modalities, setModalities] = useState<Modality[] | []>([]);
-
   const { data: user } = useSession();
 
   const {
@@ -81,11 +85,11 @@ export function CreateContract() {
     defaultValues: {
       address: "",
       checkbox: false,
-      companyHires: "Horus",
+      companyHires: "Horus Engenharia",
       contracting: "",
       contractValue: undefined,
       document: "",
-      modalityId: "",
+      modality: "private",
       name: "",
       refundAmount: undefined,
     },
@@ -95,42 +99,37 @@ export function CreateContract() {
   const document = watch("document");
   const valueDocument = replaceDocument(document, isCpf);
 
-  let isValidateCpf = false;
-  let isValidateCnpj = false;
-
-  if (isCpf) {
-    isValidateCpf = validateCpf(document);
-  } else {
-    isValidateCnpj = validateCnpj(document);
-  }
-
-  const documentSelected = isCpf ? isValidateCpf : isValidateCnpj;
+  const documentSelected = documentValidate(valueDocument, isCpf);
 
   async function handleFormSubmit(data: CreateContractType) {
+    if (!contractDate) {
+      return toast.error("Informe a data inicial do contrato.");
+    }
+
+    if (!contractTerm) {
+      return toast.error("Informe a data final do contrato.");
+    }
+
+    if (!documentSelected) {
+      return toast.error("O CPF/CNPJ está incorreto.");
+    }
+
+    const contractValue = withCentavos(data.contractValue);
+    const refundAmount = withCentavos(data.refundAmount);
+
     try {
-      if (!contractDate) {
-        return toast.error("Informe a data inicial do contrato.");
-      }
-
-      if (!contractTerm) {
-        return toast.error("Informe a data final do contrato.");
-      }
-
-      const contractValue = withCentavos(data.contractValue);
-      const refundAmount = withCentavos(data.refundAmount);
-
       await createContract({
         contract: {
           name: data.name,
           contracting: data.contracting,
           document: data.document.replace(/\D/g, ""),
           address: data.address,
-          contractValue: new Prisma.Decimal(contractValue),
-          refundAmount: new Prisma.Decimal(refundAmount),
+          contractValue: contractValue,
+          refundAmount: refundAmount,
           companyHires: data.companyHires,
           contractDate: contractDate,
           contractTerm: contractTerm!,
-          modalityId: data.modalityId,
+          modality: data.modality,
           userId: user?.user.id!,
         },
         isCpf,
@@ -145,22 +144,6 @@ export function CreateContract() {
       toast.error("Ops, algo deu errado, tente novamente mais tarde!");
     }
   }
-
-  useEffect(() => {
-    async function getModalities() {
-      try {
-        const response = await fetch("/api/modalities");
-        const result = await response.json();
-        console.log(result);
-
-        setModalities(result);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    }
-
-    getModalities();
-  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -177,7 +160,7 @@ export function CreateContract() {
             <span className="w-32 text-accent-foreground">Modalidade:</span>
             <Controller
               control={control}
-              name="modalityId"
+              name="modality"
               render={({ field: { value, onChange, disabled, name } }) => (
                 <Select
                   name={name}
@@ -190,12 +173,11 @@ export function CreateContract() {
                   </SelectTrigger>
 
                   <SelectContent>
-                    {modalities &&
-                      modalities.map((modality) => (
-                        <SelectItem key={modality.id} value={modality.id}>
-                          {getNameModality(modality.name)}
-                        </SelectItem>
-                      ))}
+                    {MODALITIES.map((modality) => (
+                      <SelectItem key={modality.value} value={modality.value}>
+                        {modality.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               )}
@@ -225,7 +207,7 @@ export function CreateContract() {
               className={`${errors?.address && "focus-visible:ring-red-500"}`}
             />
           </label>
-          <label htmlFor="" className="flex items-center gap-2">
+          <label htmlFor="" className="relative flex items-center gap-2">
             <span className="w-24 text-accent-foreground">CPF/CNPJ:</span>
             <Input
               placeholder={isCpf ? "000.000.000-00" : "00.000.000/0000-00"}
@@ -238,7 +220,10 @@ export function CreateContract() {
               {...register("document")}
             />
 
-            <label htmlFor="" className="flex items-center gap-2 text-sm">
+            <label
+              htmlFor=""
+              className="absolute right-2 flex items-center gap-2 border-l bg-white px-2 text-sm"
+            >
               CPF
               <Input
                 type="checkbox"

@@ -51,7 +51,7 @@ export function Header() {
 
   return (
     <header className="h-16 bg-horus pb-72 lg:h-20">
-      <div className="container flex w-full flex-col justify-between gap-5 p-3 lg:gap-10 lg:py-5">
+      <div className="container flex w-full flex-col justify-between gap-5 p-3 px-8 lg:gap-10 lg:py-5">
         <div className="flex items-center justify-between">
           <Link href="/">
             <Image
