@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -97,7 +97,10 @@ export function CreateContract() {
 
   const isCpf = watch("checkbox");
   const document = watch("document");
-  const valueDocument = replaceDocument(document, isCpf);
+  const valueDocument = useMemo(
+    () => replaceDocument(document, isCpf),
+    [document, isCpf],
+  );
 
   const documentSelected = documentValidate(valueDocument, isCpf);
 
