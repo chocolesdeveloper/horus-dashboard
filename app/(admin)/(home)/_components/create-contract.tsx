@@ -150,7 +150,7 @@ export function CreateContract() {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="h-screen w-screen overflow-y-auto md:max-h-[80vh]">
         <DialogHeader className="border-b pb-4">
           <DialogTitle>Novo contrato</DialogTitle>
         </DialogHeader>
