@@ -359,7 +359,7 @@ export function CreateContract() {
             </Popover>
           </label>
 
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" variant="horus" disabled={isSubmitting}>
             {isSubmitting ? (
               <div className="flex items-center gap-2">
                 Cadastrando
