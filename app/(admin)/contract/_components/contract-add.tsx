@@ -84,10 +84,6 @@ export function ContractAdd({ contract }: ContractAddProps) {
   });
 
   async function handleUpdateContract(data: ContractAddFormType) {
-    console.log(data.executedValue);
-    console.log(Number(data.executedValue));
-    console.log(withCentavos(data.executedValue) * 100);
-
     try {
       const contractResponse = await UpdatePartialField({
         contractId: contract.id,

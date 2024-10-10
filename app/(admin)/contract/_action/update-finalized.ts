@@ -10,6 +10,4 @@ interface updateFinaliezedProps {
 
 export async function updateFinalized() {
   const auth = await getServerSession();
-
-  console.log(auth);
 }
