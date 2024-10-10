@@ -34,7 +34,7 @@ export function InputSimple({
         />
         {errors[name] && (
           <span className="text-center text-xs text-red-500">
-            {errors ? String(errors?.[name].message) : ""}
+            {errors[name] ? String(errors?.[name]?.message) : ""}
           </span>
         )}
       </div>
