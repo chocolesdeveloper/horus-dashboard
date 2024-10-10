@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 
 import CredentialsProvider from "next-auth/providers/credentials";
+import { db } from "../lib/prisma";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -34,12 +35,17 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
+  session: {
+    updateAge: 60 * 60,
+  },
   secret: process.env.NEXT_AUTH_SECRET as string,
   pages: {
     signIn: "/login",
   },
   callbacks: {
     async jwt({ token, user }) {
+      console.log(user);
+
       user && (token.user = user);
       return token;
     },

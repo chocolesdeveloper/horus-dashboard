@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Image from "next/image";
 
 import {
   Table,
@@ -15,6 +14,7 @@ import { ButtonCreate } from "../_components/button";
 
 import { getContractFilter } from "../db/queries";
 import { updateModality } from "../db/update";
+import { NotAFile } from "@/components/not-a-file";
 
 export const metadata: Metadata = {
   title: "Contratos",
@@ -41,7 +41,7 @@ export default async function ContractPage({
   );
 
   return (
-    <div className="container -mt-32 flex flex-col gap-3">
+    <div className="container -mt-32 flex flex-col gap-3 pb-10">
       <ButtonCreate />
 
       <div className="rounded-lg bg-white px-5 pt-5 shadow-xl">
@@ -70,24 +70,7 @@ export default async function ContractPage({
         </div>
 
         {contracts.length === 0 && (
-          <div className="container flex h-[700px] w-full flex-col items-center justify-center overflow-auto border-secondary bg-white p-5 text-center">
-            <Image
-              src="/no-found.gif"
-              alt="gato preto animado"
-              width={300}
-              height={300}
-              className="object-cover"
-            />
-
-            <h3 className="text-xl lg:text-3xl">
-              Parece que o <span className="font-bold">Mike</span> não achou
-              nada aqui...
-            </h3>
-
-            <p className="text-sm lg:font-light">
-              Tente pesquisar novamente ou crie um contrato.
-            </p>
-          </div>
+          <NotAFile description="Tente pesquisar novamente ou crie um contrato." />
         )}
       </div>
     </div>

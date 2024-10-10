@@ -39,8 +39,6 @@ export async function updateContract({ contract }: updateContractProps) {
     },
   });
 
-  console.log(statusId);
-
   if (!statusId) {
     throw new Error("Status not found");
   }
@@ -57,7 +55,7 @@ export async function updateContract({ contract }: updateContractProps) {
 
   const updatedContract = await db.contract.update({
     where: {
-      userId: user.user.id,
+      userId: user.user.role === 1 ? user.user.id : user.user.userId,
       id: contract.id,
     },
     data: {

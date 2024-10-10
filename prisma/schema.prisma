@@ -24,6 +24,7 @@ model Contract {
   createdAt     DateTime  @default(now())
   statusId      String
   userId        String
+  staffId       String?
   modalityId    String
   name          String
   contracting   String
@@ -40,6 +41,7 @@ model Contract {
   user     User     @relation(fields: [userId], references: [id])
   status   Status   @relation(fields: [statusId], references: [id])
   modality Modality @relation(fields: [modalityId], references: [id])
+  staff    Staff?   @relation(fields: [staffId], references: [id])
 }
 
 model User {
@@ -51,4 +53,19 @@ model User {
   imageUrl  String?
   createdAt DateTime   @default(now())
   Contract  Contract[]
+  Staff     Staff[]
+}
+
+model Staff {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  email     String   @unique
+  password  String
+  role      Int      @default(1)
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user     User       @relation(fields: [userId], references: [id])
+  Contract Contract[]
 }

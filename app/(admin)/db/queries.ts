@@ -16,7 +16,7 @@ export const getContracts = cache(async (status: string, modality: string) => {
 
   const data = await db.contract.findMany({
     where: {
-      userId: session.user.id,
+      userId: session.user?.userId ? session.user?.userId : session.user.id,
       status: {
         name: status,
       },
@@ -51,7 +51,7 @@ export const getContractFilter = cache(
 
     const data = await db.contract.findMany({
       where: {
-        userId: session.user.id,
+        userId: session.user?.userId ? session.user?.userId : session.user.id,
         document: {
           contains: document,
         },
@@ -102,4 +102,20 @@ export const getModality = cache(async () => {
   const data = await db.modality.findMany();
 
   return data;
+});
+
+export const getStaffs = cache(async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const staffs = await db.staff.findMany({
+    where: {
+      userId: session.user.id,
+    },
+  });
+
+  return staffs || [];
 });

@@ -15,12 +15,15 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { deleteContract } from "../_action/delete-contract";
 import { Trash2Icon } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface ConfirmedDeleteProps {
   contractId: string;
 }
 
 export function ConfirmedDelete({ contractId }: ConfirmedDeleteProps) {
+  const { data: user } = useSession();
+
   async function handleClick() {
     try {
       deleteContract(contractId);
@@ -37,6 +40,7 @@ export function ConfirmedDelete({ contractId }: ConfirmedDeleteProps) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
+          disabled={user?.user.role !== 1}
           variant="destructive"
           className="w-full px-2 text-accent-foreground"
         >

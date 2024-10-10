@@ -38,14 +38,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { replaceDocument } from "../../_utils/replace-document";
-import { withCentavos } from "../../_utils/with-centavos";
+import { replaceDocument } from "../_utils/replace-document";
+import { withCentavos } from "../_utils/with-centavos";
 import { documentValidate } from "@/app/_utils/validation";
 
 import { cn } from "@/app/_utils/utils";
 
-import { createContract } from "../_action/create-contract";
-import { useNewContract } from "../../hooks/use-new-contract";
+import { createContract } from "../(home)/_action/create-contract";
+import { useNewContract } from "../hooks/use-new-contract";
 
 import { MODALITIES } from "@/app/lib/constants";
 

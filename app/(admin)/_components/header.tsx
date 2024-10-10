@@ -7,7 +7,7 @@ import {
   BookTextIcon,
   DoorOpenIcon,
   HomeIcon,
-  X,
+  Users,
 } from "lucide-react";
 
 import { formatDate } from "date-fns";
@@ -32,11 +32,19 @@ const NAV_ITEMS = [
     label: "Home",
     href: "/",
     icon: <HomeIcon size={18} />,
+    roles: [1, 2], // Roles que podem ver essa aba
   },
   {
     label: "Contratos",
     href: "/contract",
     icon: <BookTextIcon size={18} />,
+    roles: [1, 2], // Roles que podem ver essa aba
+  },
+  {
+    label: "Staff",
+    href: "/staff-management",
+    icon: <Users size={18} />,
+    roles: [1], // Somente role 1 pode ver essa aba
   },
 ];
 
@@ -71,7 +79,9 @@ export function Header() {
           </Link>
 
           <div className="hidden items-center gap-2 lg:flex">
-            {NAV_ITEMS.map((item) => {
+            {NAV_ITEMS.filter((item) =>
+              item.roles.includes(data?.user.role!),
+            ).map((item) => {
               const isActive = pathname === item.href;
 
               return (
@@ -81,11 +91,11 @@ export function Header() {
                   key={item.href}
                 >
                   <Button
-                    variant={isActive ? "horus" : "outline"}
+                    variant={isActive ? "outline" : "horus"}
                     className={cn(
-                      "flex items-center gap-2",
+                      "flex items-center gap-2 outline-none hover:outline-white",
                       isActive &&
-                        "border border-white bg-transparent text-white underline underline-offset-2",
+                        "border bg-transparent bg-white underline underline-offset-2 hover:outline-0",
                     )}
                   >
                     {item.icon}
@@ -106,7 +116,9 @@ export function Header() {
             </SheetTrigger>
             <SheetContent className="flex flex-col justify-between rounded-md px-4 py-16">
               <div className="flex w-full flex-col items-center gap-3 ">
-                {NAV_ITEMS.map((item) => {
+                {NAV_ITEMS.filter((item) =>
+                  item.roles.includes(data?.user.role!),
+                ).map((item) => {
                   const isActive = pathname === item.href;
 
                   return (
@@ -148,6 +160,7 @@ export function Header() {
               Bem-vindo(a) novamente,{" "}
               <span className="text-base font-bold lg:text-xl">
                 {data?.user.name}
+                {data?.user.role !== 1 && "[STAFF]"}
               </span>
             </div>
             <span className="text-black">{day}</span>

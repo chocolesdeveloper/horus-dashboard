@@ -2,7 +2,10 @@
 
 import { useMountedState } from "react-use";
 
-import { CreateContract } from "../(home)/_components/create-contract";
+import { CreateContract } from "../_components/create-contract";
+
+import { CreateStaff } from "../_components/create-staff";
+import { UpdateStaff } from "../_components/update-staff";
 
 export function DialogProvider() {
   const isMounted = useMountedState();
@@ -11,5 +14,12 @@ export function DialogProvider() {
     return null;
   }
 
-  return <CreateContract />;
+  return (
+    <>
+      <CreateContract />
+
+      <CreateStaff />
+      <UpdateStaff />
+    </>
+  );
 }

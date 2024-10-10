@@ -9,6 +9,8 @@ import { redirect } from "next/navigation";
 import { NextAuthSessionProvider } from "@/providers/session-provider";
 import { authOptions } from "@/app/_utils/authOptions";
 import { DialogProvider } from "./providers/dialog-provider";
+import { db } from "../lib/prisma";
+import SignOutAdminUserUserOnTheClientSide from "./_components/disconnect";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,12 +32,24 @@ export default async function PrivateLayout({
     return redirect("/login");
   }
 
+  const response = await db.staff.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
   return (
     <html lang="en">
       <body className={cn(inter.className)} suppressHydrationWarning>
         <NextAuthSessionProvider>
           <DialogProvider />
           <Header />
+          {response?.role === 2 && !response.status && (
+            <>
+              <SignOutAdminUserUserOnTheClientSide />
+              {children}
+            </>
+          )}
           {children}
           <Toaster />
         </NextAuthSessionProvider>

@@ -11,28 +11,39 @@ type RequestType = z.infer<typeof schemaRequest>;
 
 export async function POST(req: Request) {
   const response: RequestType = await req.json();
-
   const { email, password } = response;
 
   email.toLocaleLowerCase();
 
-  const user = await db.user.findUnique({
+  // Buscar admin
+  const admin = await db.user.findUnique({
     where: {
       email,
       password,
+      role: 1,
     },
   });
 
-  if (!user) {
-    return NextResponse.json(
-      {
-        message: "User not found",
-      },
-      {
-        status: 404,
-      },
-    );
+  if (admin) {
+    return NextResponse.json({ user: admin });
   }
 
-  return NextResponse.json({ user });
+  // Buscar member
+  const member = await db.staff.findUnique({
+    where: {
+      email,
+      password,
+      role: 2,
+    },
+  });
+
+  if (!member?.status) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  if (member) {
+    return NextResponse.json({ user: member });
+  }
+
+  return NextResponse.json({ message: "User not found" }, { status: 404 });
 }
