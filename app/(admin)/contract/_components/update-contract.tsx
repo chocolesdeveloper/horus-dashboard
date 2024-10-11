@@ -56,13 +56,11 @@ interface UpdateContractProps {
       name: string;
     };
   };
-  onSuccessUpdate: () => void;
+  onClose: (value: boolean) => void;
 }
 
-export function UpdateContract({
-  contract,
-  onSuccessUpdate,
-}: UpdateContractProps) {
+export function UpdateContract({ contract, onClose }: UpdateContractProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const [contractDate, setContractDate] = useState<Date | undefined>(
@@ -119,8 +117,7 @@ export function UpdateContract({
         });
       });
 
-      onSuccessUpdate();
-
+      onClose(false);
       toast.success("Atualizado com sucesso!");
     } catch (error) {
       console.error(error);
@@ -388,7 +385,6 @@ export function UpdateContract({
           </TableRow>
         </TableBody>
       </Table>
-
       <Button
         className="mt-2 w-full"
         variant="horus"

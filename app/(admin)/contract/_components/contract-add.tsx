@@ -4,11 +4,9 @@ import { useState } from "react";
 
 import { cn } from "@/app/_utils/utils";
 
-import { Prisma } from "@prisma/client";
-
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { number, z } from "zod";
+import { z } from "zod";
 
 import { CalendarIcon, PlusCircleIcon } from "lucide-react";
 
@@ -105,12 +103,14 @@ export function ContractAdd({ contract }: ContractAddProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="w-full px-2 text-accent-foreground"
+          className="flex w-full items-center gap-2 px-2 text-accent-foreground transition-all hover:my-2 hover:scale-105 hover:border hover:bg-emerald-200/10 hover:text-primary hover:shadow-xl"
+          variant="ghost"
           disabled={
             isPassed || contract.status.name === "finished" || remaining <= 0
           }
         >
-          <PlusCircleIcon size={18} />
+          <PlusCircleIcon size={18} className="stroke-2" />
+          Atualizar contrato
         </Button>
       </DialogTrigger>
 

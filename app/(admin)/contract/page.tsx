@@ -58,7 +58,6 @@ export default async function ContractPage({
                 <TableHead className="w-[150px]">Modalidade</TableHead>
                 <TableHead className="w-[150px]">Status</TableHead>
                 <TableHead className="w-[20px]"></TableHead>
-                <TableHead className="w-[20px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

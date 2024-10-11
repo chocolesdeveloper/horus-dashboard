@@ -1,3 +1,5 @@
+"use client";
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { ContractInfo } from "./contract-info";
 import { OrderStatus } from "./order-stauts";
@@ -7,6 +9,15 @@ import { formatMoney } from "@/app/(admin)/_utils/formart-money";
 import { getNameModality } from "../_utils/get-name-modality";
 import { replaceDocument } from "../../_utils/replace-document";
 import { IContractSerialized } from "@/app/types/contract-serialized";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Bolt, CircleEllipsis, Edit, Trash } from "lucide-react";
+import { EditContract } from "./EditContract";
 
 interface TableRowContactProps {
   contract: IContractSerialized & {
@@ -21,7 +32,7 @@ interface TableRowContactProps {
   };
 }
 
-export async function TableRowContact({ contract }: TableRowContactProps) {
+export function TableRowContact({ contract }: TableRowContactProps) {
   let documentReplace = "";
 
   if (contract.document.length === 11) {
@@ -31,7 +42,7 @@ export async function TableRowContact({ contract }: TableRowContactProps) {
   }
 
   return (
-    <TableRow key={contract.id}>
+    <TableRow key={contract.id} className="hover:bg-slate-200/30">
       <TableCell>
         <ContractInfo contract={contract} />
       </TableCell>
@@ -43,10 +54,30 @@ export async function TableRowContact({ contract }: TableRowContactProps) {
         <OrderStatus status={contract.status.name} />
       </TableCell>
       <TableCell>
-        <ContractAdd contract={contract} />
-      </TableCell>
-      <TableCell>
-        <ConfirmedDelete contractId={contract.id} />
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger>
+            <CircleEllipsis className="size-5 rotate-90" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="flex flex-col items-center p-2">
+            <DropdownMenuItem
+              asChild
+              onClick={() => {}}
+              className="flex items-center justify-center gap-2"
+            >
+              <ContractAdd contract={contract} />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              asChild
+              onClick={() => {}}
+              className="flex items-center justify-center gap-2"
+            >
+              <ConfirmedDelete contractId={contract.id} />
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <EditContract contract={contract} />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </TableCell>
     </TableRow>
   );

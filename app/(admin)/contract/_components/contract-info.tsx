@@ -30,12 +30,6 @@ interface ContractInfoProps {
 }
 
 export function ContractInfo({ contract }: ContractInfoProps) {
-  const [isUpdate, setIsUpdate] = useState(false);
-
-  function onUpdateContract() {
-    setIsUpdate(false);
-  }
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -47,18 +41,10 @@ export function ContractInfo({ contract }: ContractInfoProps) {
       <DialogContent className="max-h-[80%] overflow-y-auto">
         <DialogHeader className="mt-4">
           <DialogHeader>
-            <button
-              className="flex flex-row items-center gap-4"
-              onClick={() => setIsUpdate(!isUpdate)}
-            >
+            <button className="flex flex-row items-center gap-4">
               <h2 className="text-2xl tracking-tight">
                 Contrato de {contract.contracting}
               </h2>
-              {isUpdate ? (
-                <ArrowLeftFromLineIcon className="size-5 cursor-pointer transition-all hover:text-horus" />
-              ) : (
-                <SquarePenIcon className="size-5 cursor-pointer transition-all hover:text-horus" />
-              )}
             </button>
           </DialogHeader>
           <DialogDescription className="text-sm text-gray-400">
@@ -66,14 +52,7 @@ export function ContractInfo({ contract }: ContractInfoProps) {
           </DialogDescription>
         </DialogHeader>
 
-        {isUpdate ? (
-          <UpdateContract
-            contract={contract}
-            onSuccessUpdate={onUpdateContract}
-          />
-        ) : (
-          <InfoComponent contract={contract} />
-        )}
+        <InfoComponent contract={contract} />
       </DialogContent>
     </Dialog>
   );

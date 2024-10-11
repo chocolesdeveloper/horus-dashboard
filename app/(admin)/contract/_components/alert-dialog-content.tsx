@@ -41,10 +41,11 @@ export function ConfirmedDelete({ contractId }: ConfirmedDeleteProps) {
       <AlertDialogTrigger asChild>
         <Button
           disabled={user?.user.role !== 1}
-          variant="destructive"
-          className="w-full px-2 text-accent-foreground"
+          variant="ghost"
+          className="flex w-full items-center gap-2 px-2 text-accent-foreground transition-all hover:my-2 hover:scale-105 hover:border hover:bg-rose-200/20 hover:text-destructive hover:shadow-xl"
         >
           <Trash2Icon size={18} />
+          Deletar contrato
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
