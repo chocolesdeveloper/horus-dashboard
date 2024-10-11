@@ -159,8 +159,7 @@ export function Header() {
             <div className="font-semibold text-black">
               Bem-vindo(a) novamente,{" "}
               <span className="text-base font-bold lg:text-xl">
-                {data?.user.name}
-                {data?.user.role !== 1 && "[STAFF]"}
+                {data?.user.name} {data && data?.user.role !== 1 && "[STAFF]"}
               </span>
             </div>
             <span className="text-black">{day}</span>

@@ -26,7 +26,7 @@ export async function CreateStaffServer({
   const staff = await db.staff.create({
     data: {
       name,
-      email,
+      email: email.toLowerCase(),
       password,
       userId: data.user.id,
       role: 2,
